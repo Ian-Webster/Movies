@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Movies.Business.Interfaces;
+using Movies.Domain.DTO;
 
 namespace Movies.API.Controllers
 {
@@ -32,6 +34,7 @@ namespace Movies.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(200, Type = typeof(List<Movie>))]
         public IActionResult Get()
         {
             var movies = _movieService.TopMovies(movieCount);
@@ -50,6 +53,7 @@ namespace Movies.API.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("userId")]
+        [ProducesResponseType(200, Type = typeof(List<Movie>))]
         public IActionResult Get(int userId)
         {
             if (userId <= 0)

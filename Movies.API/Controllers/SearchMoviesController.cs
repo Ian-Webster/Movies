@@ -2,6 +2,7 @@
 using Movies.Business.Interfaces;
 using Movies.Domain.DTO;
 using Movies.Domain.Enums.Validation;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Movies.API.Controllers
@@ -31,6 +32,7 @@ namespace Movies.API.Controllers
         /// <param name="criteria"></param>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(200, Type = typeof(List<Movie>))]
         public IActionResult Get(MovieSearchCriteria criteria)
         {
             var validationResult = _movieService.ValidateSearchCriteria(criteria);
