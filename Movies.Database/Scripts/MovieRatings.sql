@@ -2,7 +2,7 @@
 
 DECLARE @LastUserId int = (select max(Id) from [User])
 
---insert dummy users
+--insert dummy movie ratings
 INSERT INTO MovieRating
 SELECT	mve.Id as MovieId,
 		usr.id as UserId,
@@ -10,7 +10,7 @@ SELECT	mve.Id as MovieId,
 FROM	Movie mve
 JOIN	[user] usr on usr.id > 0 AND usr.Id < @LastUserId --leave the last user so that record can be used to test saving ratings
 
---insert some dummy movie ratings for each of the users
+--reset average movie ratings
 UPDATE Movie
 SET AverageRating = (SELECT	CAST(AVG(CAST(rating as decimal(4,2))) as decimal(4,2))
 					FROM	MovieRating
