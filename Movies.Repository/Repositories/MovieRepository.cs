@@ -37,8 +37,7 @@ namespace Movies.Repository
                 query = query.Where(m => genreList.Contains(m.GenreId));
             }
 
-            return query.OrderBy(m => m.Title)
-                .Select(m => new Movie
+            return query.Select(m => new Movie
                 {
                     AverageRating = m.AverageRating,
                     Genre = (Genres)m.GenreId,
@@ -86,23 +85,7 @@ namespace Movies.Repository
                 YearOfRelease = mr.Movie.YearOfRelease
             }).ToList();
 
-            /*
-            return _context.MovieRatingDbSet
-                .Where(mr => mr.UserId == userId)
-                .OrderByDescending(mr => mr.Movie.AverageRating)
-                .ThenBy(mr => mr.Movie.Title)
-                .Take(movieCount)
-                .Select(mr => new Movie
-                    {
-                        AverageRating = mr.Movie.AverageRating,
-                        Genre = (Genres)mr.Movie.GenreId,
-                        Id = mr.MovieId,
-                        RunningTime = mr.Movie.RunningTime,
-                        Title = mr.Movie.Title,
-                        YearOfRelease = mr.Movie.YearOfRelease
-                    })
-                .ToList();
-                */
         }
+
     }
 }

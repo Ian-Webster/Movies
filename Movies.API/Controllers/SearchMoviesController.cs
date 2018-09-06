@@ -41,8 +41,7 @@ namespace Movies.API.Controllers
             {
                 case MovieSearchValidationResults.InvalidCriteria:
                 case MovieSearchValidationResults.NoCriteria:
-                    return BadRequest(validationResult.ToString());
-                
+                    return BadRequest(validationResult.ToString());                
             }
 
             var movies = _movieService.SearchMovies(criteria);

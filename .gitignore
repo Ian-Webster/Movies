@@ -118,3 +118,10 @@ Movies.Repository/obj/Movies.Repository.csproj.nuget.cache
 Movies.Repository/obj/Movies.Repository.csproj.nuget.g.props
 Movies.Repository/obj/Movies.Repository.csproj.nuget.g.targets
 Movies.Repository/obj/project.assets.json
+/Movies.Respository.Tests/bin/Debug/netcoreapp2.0/*.json
+/Movies.API.Tests/bin/Debug/netcoreapp2.0/*.json
+*.xml
+netcoreapp2.0
+obj
+/Movies.Database/Movies.Database.dbmdl
+/Movies.Database/Movies.Database.jfm
