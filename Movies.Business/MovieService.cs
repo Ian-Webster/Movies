@@ -92,5 +92,10 @@ namespace Movies.Business
 
             return MovieSearchValidationResults.OK;
         }
+
+        public async Task<bool> SaveMovieAsync(Movie movie)
+        {
+            return await _movieRepository.SaveMovieAsync(movie);
+        }
     }
 }

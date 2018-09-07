@@ -42,5 +42,12 @@ namespace Movies.Business.Interfaces
         /// <param name="movieId"></param>
         /// <returns></returns>
         Task<bool> MovieExistsAsync(int movieId);
+
+        /// <summary>
+        /// Saves the given movie, if existing movie updates, if new inserts, returns true if save was successful
+        /// </summary>
+        /// <param name="movie"></param>
+        /// <returns></returns>
+        Task<bool> SaveMovieAsync(Movie movie);
     }
 }

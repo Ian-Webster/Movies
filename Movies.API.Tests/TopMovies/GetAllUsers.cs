@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Movies.Domain.DTO;
+using dto = Movies.Domain.DTO;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 
 namespace Movies.API.Tests.TopMovies
 {
@@ -28,11 +29,11 @@ namespace Movies.API.Tests.TopMovies
             //arrange
             if (isNull)
             {
-                MockMovieService.Setup(s => s.TopMoviesAsync(It.IsAny<byte>())).Returns(Task.FromResult(null as List<Movie>));
+                MockMovieService.Setup(s => s.TopMoviesAsync(It.IsAny<byte>())).Returns(Task.FromResult(null as List<dto.Movie>));
             }
             else
             {
-                MockMovieService.Setup(s => s.TopMoviesAsync(It.IsAny<byte>())).Returns(Task.FromResult(new List<Movie>()));
+                MockMovieService.Setup(s => s.TopMoviesAsync(It.IsAny<byte>())).Returns(Task.FromResult(new List<dto.Movie>()));
             }
 
             //act
@@ -47,7 +48,7 @@ namespace Movies.API.Tests.TopMovies
         public void Should_ReturnJsonResult()
         {
             //arrange
-            MockMovieService.Setup(s => s.TopMoviesAsync(It.IsAny<byte>())).Returns(Task.FromResult(new List<Movie> { new Movie() }));
+            MockMovieService.Setup(s => s.TopMoviesAsync(It.IsAny<byte>())).Returns(Task.FromResult(new List<dto.Movie> { new dto.Movie() }));
 
             //act
             var asyncResult = GetController().Get();

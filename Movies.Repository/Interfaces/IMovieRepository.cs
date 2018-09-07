@@ -33,5 +33,12 @@ namespace Movies.Repository.Interfaces
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, int userId);
+
+        /// <summary>
+        /// Saves the movie, inserts if the movie doesn't exist or updates if the movie does exist
+        /// </summary>
+        /// <param name="movie"></param>
+        /// <returns></returns>
+        Task<bool> SaveMovieAsync(Movie movie);
     }
 }

@@ -93,5 +93,21 @@ namespace Movies.Repository
 
         }
 
+        public async Task<bool> SaveMovieAsync(Movie movie)
+        {
+            var movieDao = _context.MovieDbSet.Find(movie.Id);
+            if (movieDao == null)
+            {
+                movieDao = new Repo.Movie();
+                _context.Add(movieDao);
+            }
+            movieDao.GenreId = (short)movie.Genre;
+            movieDao.RunningTime = movie.RunningTime;
+            movieDao.Title = movie.Title;
+            movieDao.YearOfRelease = movie.YearOfRelease;
+
+            return await _context.SaveChangesAsync() > 0;
+        }
+
     }
 }
