@@ -13,8 +13,9 @@ namespace Movies.Repository.Tests.Movie
     {
 
         [SetUp]
-        protected void Setup()
+        protected new void Setup()
         {
+            base.Setup();
             InsertMovieTestData();
             InsertUserRatingData();
         }

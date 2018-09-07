@@ -1,9 +1,15 @@
 ﻿using Movies.Repository.Entities;
+using NUnit.Framework;
 
 namespace Movies.Repository.Tests.Rating
 {
     public class RatingRepositoryBase: TestRepositoryBase
     {
+        [SetUp]
+        protected new void Setup()
+        {
+            base.Setup();
+        }
 
         protected RatingRepository GetRepository()
         {

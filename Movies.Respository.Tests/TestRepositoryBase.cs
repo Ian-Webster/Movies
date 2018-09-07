@@ -1,6 +1,4 @@
-﻿using EfCore.InMemoryHelpers;
-using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace Movies.Repository.Tests
@@ -10,7 +8,6 @@ namespace Movies.Repository.Tests
 
         protected DbContextOptionsBuilder<Context> options;
 
-        [SetUp]
         protected void Setup()
         {
             options = new DbContextOptionsBuilder<Context>()
