@@ -1,5 +1,6 @@
 ﻿using Movies.Domain.DTO;
 using Movies.Domain.Enums.Validation;
+using System.Threading.Tasks;
 
 namespace Movies.Business.Interfaces
 {
@@ -10,7 +11,7 @@ namespace Movies.Business.Interfaces
         /// </summary>
         /// <param name="movieRating"></param>
         /// <returns></returns>
-        MovieRatingSaveValidationResults ValidateMovieRating(MovieRating movieRating);
+        Task<MovieRatingSaveValidationResults> ValidateMovieRatingAsync(MovieRating movieRating);
 
         /// <summary>
         /// Saves the rating.
@@ -18,7 +19,7 @@ namespace Movies.Business.Interfaces
         /// </summary>
         /// <param name="movieRating"></param>
         /// <returns>MovingRatingSaveResults indicate save outcome</returns>
-        bool SaveRating(MovieRating movieRating);
+        Task<bool> SaveRatingAsync(MovieRating movieRating);
 
     }
 }

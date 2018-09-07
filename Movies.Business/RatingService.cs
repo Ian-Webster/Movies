@@ -3,6 +3,7 @@ using Movies.Domain.DTO;
 using Movies.Domain.Enums.Validation;
 using Movies.Repository.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace Movies.Business
 {
@@ -19,9 +20,9 @@ namespace Movies.Business
             _userService = userService;
         }
 
-        public bool SaveRating(MovieRating movieRating)
+        public async Task<bool> SaveRatingAsync(MovieRating movieRating)
         {
-            var validationResult = ValidateMovieRating(movieRating);
+            var validationResult = await ValidateMovieRatingAsync(movieRating);
 
             switch(validationResult)
             {
@@ -37,10 +38,10 @@ namespace Movies.Business
                     throw new ArgumentException($"User note found for movieRating.UserId {movieRating.UserId} must not be zero", "movieRating");
             }
 
-            return _ratingRepository.SaveRating(movieRating);
+            return await _ratingRepository.SaveRatingAsync(movieRating);
         }
 
-        public MovieRatingSaveValidationResults ValidateMovieRating(MovieRating movieRating)
+        public async Task<MovieRatingSaveValidationResults> ValidateMovieRatingAsync(MovieRating movieRating)
         {
             if (movieRating == null)
             {
@@ -52,7 +53,7 @@ namespace Movies.Business
                 return MovieRatingSaveValidationResults.InvalidMovieId;
             }
 
-            if (!_movieService.MovieExists(movieRating.MovieId))
+            if (!await _movieService.MovieExistsAsync(movieRating.MovieId))
             {
                 return MovieRatingSaveValidationResults.MovieNotfound;
             }
@@ -62,7 +63,7 @@ namespace Movies.Business
                 return MovieRatingSaveValidationResults.InvalidUserId;
             }
 
-            if (!_userService.UserExists(movieRating.UserId))
+            if (! await _userService.UserExistsAsync(movieRating.UserId))
             {
                 return MovieRatingSaveValidationResults.UserNotFound;
             }

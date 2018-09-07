@@ -25,16 +25,16 @@ namespace Movies.Repository.Tests.Movie
             }
 
             //act
-            var result = GetRepository().MovieExists(movieId);
+            var result = GetRepository().MovieExistsAsync(movieId);
 
             //assert
             if (moviesExists)
             {
-                Assert.IsTrue(result);
+                Assert.IsTrue(result.Result);
             }
             else
             {
-                Assert.IsFalse(result);
+                Assert.IsFalse(result.Result);
             }
         }
 

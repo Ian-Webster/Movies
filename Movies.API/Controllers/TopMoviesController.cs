@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Movies.Business.Interfaces;
 using Movies.Domain.DTO;
@@ -35,9 +36,9 @@ namespace Movies.API.Controllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(List<Movie>))]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var movies = _movieService.TopMovies(movieCount);
+            var movies = await _movieService.TopMoviesAsync(movieCount);
 
             if (movies == null || !movies.Any())
             {
@@ -54,19 +55,19 @@ namespace Movies.API.Controllers
         /// <returns></returns>
         [HttpGet("userId")]
         [ProducesResponseType(200, Type = typeof(List<Movie>))]
-        public IActionResult Get(int userId)
+        public async Task<IActionResult> Get(int userId)
         {
             if (userId <= 0)
             {
                 return BadRequest("userId is zero or negative");
             }
 
-            if (!_userService.UserExists(userId))
+            if (! await _userService.UserExistsAsync(userId))
             {
                 return BadRequest("userId is invalid");
             }
 
-            var movies = _movieService.TopMoviesByUser(movieCount, userId);
+            var movies = await _movieService.TopMoviesByUserAsync(movieCount, userId);
 
             if (movies == null || !movies.Any())
             {

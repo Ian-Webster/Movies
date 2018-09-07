@@ -1,4 +1,6 @@
-﻿namespace Movies.Business.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace Movies.Business.Interfaces
 {
     public interface IUserService
     {
@@ -7,6 +9,6 @@
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        bool UserExists(int userId);
+        Task<bool> UserExistsAsync(int userId);
     }
 }

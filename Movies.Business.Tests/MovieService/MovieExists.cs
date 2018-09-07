@@ -1,5 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Movies.Business.Tests.MovieService
 {
@@ -12,7 +13,7 @@ namespace Movies.Business.Tests.MovieService
         public void WhenCalling_MovieExists_WithInvalidMovieId_ExpectException(int movieId)
         {
             //arrange/act/assert
-            Assert.That(() => GetService().MovieExists(movieId), Throws.ArgumentException);
+            Assert.That(() => GetService().MovieExistsAsync(movieId), Throws.ArgumentException);
         }
 
         [TestCase(1)]
@@ -20,13 +21,13 @@ namespace Movies.Business.Tests.MovieService
         public void WhenCalling_MovieExists_WithValidMovieId_RepositoryMethodCalled(int movieId)
         {
             //arrange
-            MockUserService.Setup(s => s.UserExists(movieId)).Returns(true);
+            MockUserService.Setup(s => s.UserExistsAsync(movieId)).Returns(Task.FromResult(true));
 
             //act
-            var result = GetService().MovieExists(movieId);
+            var result = GetService().MovieExistsAsync(movieId);
 
             //assert
-            MockMovieRepository.Verify(s => s.MovieExists(movieId), Times.Once);
+            MockMovieRepository.Verify(s => s.MovieExistsAsync(movieId), Times.Once);
         }
     }
 }

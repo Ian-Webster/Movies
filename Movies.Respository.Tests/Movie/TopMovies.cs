@@ -24,9 +24,10 @@ namespace Movies.Repository.Tests.Movie
             }
 
             //act
-            var result = GetRepository().TopMovies(count);
+            var asyncResult = GetRepository().TopMoviesAsync(count);
 
             //assert
+            var result = asyncResult.Result;
             Assert.IsNotNull(result);
             Assert.AreEqual(count, result.Count);
 

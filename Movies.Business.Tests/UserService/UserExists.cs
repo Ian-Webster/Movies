@@ -1,5 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Movies.Business.Tests.UserService
 {
@@ -12,7 +13,7 @@ namespace Movies.Business.Tests.UserService
         public void WhenCalling_UsersExists_WithInvalidUserId_ExpectException(int userId)
         {
             //arrange/act/assert
-            Assert.That(() => GetService().UserExists(userId), Throws.ArgumentException);
+            Assert.That(() => GetService().UserExistsAsync(userId), Throws.ArgumentException);
         }
 
         [TestCase(1)]
@@ -20,13 +21,13 @@ namespace Movies.Business.Tests.UserService
         public void WhenCalling_UsersExists_WithValidUserId_RepositoryMethodCalled(int userId)
         {
             //arrange
-            MockUserRepository.Setup(s => s.UserExists(userId)).Returns(true);
+            MockUserRepository.Setup(s => s.UserExistsAsync(userId)).Returns(Task.FromResult(true));
 
             //act
-            var result = GetService().UserExists(userId);
+            var result = GetService().UserExistsAsync(userId);
 
             //assert
-            MockUserRepository.Verify(s => s.UserExists(userId), Times.Once);
+            MockUserRepository.Verify(s => s.UserExistsAsync(userId), Times.Once);
         }
 
     }

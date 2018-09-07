@@ -3,6 +3,7 @@ using Moq;
 using Movies.Domain.DTO;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Movies.API.Tests.TopMovies
 {
@@ -15,9 +16,10 @@ namespace Movies.API.Tests.TopMovies
         public void Should_ReturnBadRequest_WhenUserIdInvalid(int userId)
         {
             //arrange/act
-            var result = GetController().Get(userId);
+            var asyncResult = GetController().Get(userId);
 
             //assert
+            var result = asyncResult.Result;
             Assert.IsInstanceOf<BadRequestObjectResult>(result);
         }
 
@@ -25,23 +27,24 @@ namespace Movies.API.Tests.TopMovies
         public void Should_ReturnRequest_WhenUserDoesNotExist()
         {
             //arrange
-            MockUserService.Setup(s => s.UserExists(It.IsAny<int>())).Returns(false);
+            MockUserService.Setup(s => s.UserExistsAsync(It.IsAny<int>())).Returns(Task.FromResult(false));
 
             //act
-            var result = GetController().Get(1);
+            var asyncResult = GetController().Get(1);
 
             //assert
+            var result = asyncResult.Result;
             Assert.IsInstanceOf<BadRequestObjectResult>(result);
         }
 
         [Test]
-        public void Should_CallCorrectServiceMethod()
+        public async Task Should_CallCorrectServiceMethodAsync()
         {
             //arrange/act
-            GetController().Get(1);
+            await GetController().Get(1);
 
             //assert
-            MockMovieService.Verify(s => s.TopMoviesByUser(It.IsAny<byte>(), It.IsAny<int>()), Times.Once);
+            MockMovieService.Verify(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<int>()), Times.Once);
         }
 
         [TestCase(true)]
@@ -51,17 +54,18 @@ namespace Movies.API.Tests.TopMovies
             //arrange
             if (isNull)
             {
-                MockMovieService.Setup(s => s.TopMoviesByUser(It.IsAny<byte>(), It.IsAny<int>())).Returns(null as List<Movie>);
+                MockMovieService.Setup(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<int>())).Returns(Task.FromResult(null as List<Movie>));
             }
             else
             {
-                MockMovieService.Setup(s => s.TopMoviesByUser(It.IsAny<byte>(), It.IsAny<int>())).Returns(new List<Movie>());
+                MockMovieService.Setup(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<int>())).Returns(Task.FromResult(new List<Movie>()));
             }
 
             //act
-            var result = GetController().Get(1);
+            var asyncResult = GetController().Get(1);
 
             //assert
+            var result = asyncResult.Result;
             Assert.IsInstanceOf<NotFoundResult>(result);
         }
 
@@ -69,12 +73,13 @@ namespace Movies.API.Tests.TopMovies
         public void Should_ReturnJsonResult()
         {
             //arrange
-            MockMovieService.Setup(s => s.TopMoviesByUser(It.IsAny<byte>(), It.IsAny<int>())).Returns(new List<Movie> { new Movie() });
+            MockMovieService.Setup(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<int>())).Returns(Task.FromResult(new List<Movie> { new Movie() }));
 
             //act
-            var result = GetController().Get(1);
+            var asyncResult = GetController().Get(1);
 
             //assert
+            var result = asyncResult.Result;
             Assert.IsInstanceOf<JsonResult>(result);
         }
     }

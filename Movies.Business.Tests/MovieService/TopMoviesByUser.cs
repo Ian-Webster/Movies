@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Movies.Business.Tests.MovieService
 {
@@ -13,7 +14,7 @@ namespace Movies.Business.Tests.MovieService
         public void WhenCalling_TopMoviesByUser_WithZeroMovieCount_ExpectException()
         {
             //arrage/act/assert
-            Assert.That(() => GetService().TopMoviesByUser(0, 1), Throws.ArgumentException);
+            Assert.That(() => GetService().TopMoviesByUserAsync(0, 1), Throws.ArgumentException);
         }
 
         [TestCase(-1)]
@@ -21,17 +22,17 @@ namespace Movies.Business.Tests.MovieService
         public void WhenCalling_TopMoviesByUser_WithInvalidUserId_ExceptException(int userId)
         {
             //arrage/act/assert
-            Assert.That(() => GetService().TopMoviesByUser(1, userId), Throws.ArgumentException);
+            Assert.That(() => GetService().TopMoviesByUserAsync(1, userId), Throws.ArgumentException);
         }
 
         [Test]
         public void WhenCalling_TopMoviesByUser_WithUserThatDoesNotExist_ExpectException()
         {
             //arrange
-            MockUserService.Setup(s => s.UserExists(It.IsAny<int>())).Returns(false);
+            MockUserService.Setup(s => s.UserExistsAsync(It.IsAny<int>())).Returns(Task.FromResult(false));
 
             //act/assert
-            Assert.That(() => GetService().TopMoviesByUser(1, 1), Throws.ArgumentException);
+            Assert.That(() => GetService().TopMoviesByUserAsync(1, 1), Throws.ArgumentException);
         }
 
         [TestCase((byte)1, 3)]
@@ -39,14 +40,14 @@ namespace Movies.Business.Tests.MovieService
         public void WhenCalling_TopMoviesByUser_WithValidMovieCountAndUserId_RepositoryMethodCalled(byte movieCount, int userId)
         {
             //arrange
-            MockUserService.Setup(s => s.UserExists(userId)).Returns(true);
+            MockUserService.Setup(s => s.UserExistsAsync(userId)).Returns(Task.FromResult(true));
             
             //act
-            var result = GetService().TopMoviesByUser(movieCount, userId);
+            var result = GetService().TopMoviesByUserAsync(movieCount, userId);
 
             //assert
-            MockUserService.Verify(s => s.UserExists(userId), Times.Once);
-            MockMovieRepository.Verify(s => s.TopMoviesByUser(movieCount, userId), Times.Once);
+            MockUserService.Verify(s => s.UserExistsAsync(userId), Times.Once);
+            MockMovieRepository.Verify(s => s.TopMoviesByUserAsync(movieCount, userId), Times.Once);
         }
 
     }

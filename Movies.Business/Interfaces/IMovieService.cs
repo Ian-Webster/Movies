@@ -1,6 +1,7 @@
 ﻿using Movies.Domain.DTO;
 using Movies.Domain.Enums.Validation;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Movies.Business.Interfaces
 {
@@ -18,14 +19,14 @@ namespace Movies.Business.Interfaces
         /// </summary>
         /// <param name="movieSearchCriteria"></param>
         /// <returns></returns>
-        List<Movie> SearchMovies(MovieSearchCriteria movieSearchCriteria);
+        Task<List<Movie>> SearchMoviesAsync(MovieSearchCriteria movieSearchCriteria);
 
         /// <summary>
         /// Top movies by average rating
         /// </summary>
         /// <param name="movieCount"></param>
         /// <returns></returns>
-        List<Movie> TopMovies(byte movieCount);
+        Task<List<Movie>> TopMoviesAsync(byte movieCount);
 
         /// <summary>
         /// Top movies for the given user
@@ -33,13 +34,13 @@ namespace Movies.Business.Interfaces
         /// <param name="movieCount"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        List<Movie> TopMoviesByUser(byte movieCount, int userId);
+        Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, int userId);
 
         /// <summary>
         /// Checks if the given movie exists
         /// </summary>
         /// <param name="movieId"></param>
         /// <returns></returns>
-        bool MovieExists(int movieId);
+        Task<bool> MovieExistsAsync(int movieId);
     }
 }

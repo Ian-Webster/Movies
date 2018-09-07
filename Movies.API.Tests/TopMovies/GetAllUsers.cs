@@ -3,6 +3,7 @@ using Moq;
 using Movies.Domain.DTO;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Movies.API.Tests.TopMovies
 {
@@ -11,13 +12,13 @@ namespace Movies.API.Tests.TopMovies
     {
 
         [Test]
-        public void Should_CallCorrectServiceMethod()
+        public async Task Should_CallCorrectServiceMethodAsync()
         {
             //arrange/act
-            GetController().Get();
+            await GetController().Get();
 
             //assert
-            MockMovieService.Verify(s => s.TopMovies(It.IsAny<byte>()), Times.Once);
+            MockMovieService.Verify(s => s.TopMoviesAsync(It.IsAny<byte>()), Times.Once);
         }
 
         [TestCase(true)]
@@ -27,17 +28,18 @@ namespace Movies.API.Tests.TopMovies
             //arrange
             if (isNull)
             {
-                MockMovieService.Setup(s => s.TopMovies(It.IsAny<byte>())).Returns(null as List<Movie>);
+                MockMovieService.Setup(s => s.TopMoviesAsync(It.IsAny<byte>())).Returns(Task.FromResult(null as List<Movie>));
             }
             else
             {
-                MockMovieService.Setup(s => s.TopMovies(It.IsAny<byte>())).Returns(new List<Movie>());
+                MockMovieService.Setup(s => s.TopMoviesAsync(It.IsAny<byte>())).Returns(Task.FromResult(new List<Movie>()));
             }
 
             //act
-            var result = GetController().Get();
+            var asyncResult = GetController().Get();
 
             //assert
+            var result = asyncResult.Result;
             Assert.IsInstanceOf<NotFoundResult>(result);
         }
 
@@ -45,12 +47,13 @@ namespace Movies.API.Tests.TopMovies
         public void Should_ReturnJsonResult()
         {
             //arrange
-            MockMovieService.Setup(s => s.TopMovies(It.IsAny<byte>())).Returns(new List<Movie> { new Movie() });
+            MockMovieService.Setup(s => s.TopMoviesAsync(It.IsAny<byte>())).Returns(Task.FromResult(new List<Movie> { new Movie() }));
 
             //act
-            var result = GetController().Get();
+            var asyncResult = GetController().Get();
 
             //assert
+            var result = asyncResult.Result;
             Assert.IsInstanceOf<JsonResult>(result);
         }
 

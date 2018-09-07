@@ -12,14 +12,14 @@ namespace Movies.Business.Tests.MovieService
         public void WhenCalling_SearchMovies_WithNullCriteria_ExpectException()
         {
             //arrange/act/assert
-            Assert.That(() => GetService().SearchMovies(null), Throws.ArgumentException);
+            Assert.That(() => GetService().SearchMoviesAsync(null), Throws.ArgumentException);
         }
 
         [Test]
         public void WhenCalling_SearchMovies_WithInvalidCriteria_ExpectException()
         {
             //arrange/act/assert
-            Assert.That(() => GetService().SearchMovies(new MovieSearchCriteria()), Throws.ArgumentException);
+            Assert.That(() => GetService().SearchMoviesAsync(new MovieSearchCriteria()), Throws.ArgumentException);
         }
 
         [TestCase("test", 0, false)]
@@ -37,10 +37,10 @@ namespace Movies.Business.Tests.MovieService
             };
 
             //act
-            var result = GetService().SearchMovies(criteria);
+            var result = GetService().SearchMoviesAsync(criteria);
 
             //assert
-            MockMovieRepository.Verify(s => s.SearchMovies(It.Is<MovieSearchCriteria>(p => p.Title == movieTitle 
+            MockMovieRepository.Verify(s => s.SearchMoviesAsync(It.Is<MovieSearchCriteria>(p => p.Title == movieTitle 
                                                                                         && p.YearOfRelease == yearOfRelease 
                                                                                         && (hasGenres && p.Genres == p.Genres || p.Genres == null)))
                                                                                         , Times.Once);

@@ -2,6 +2,7 @@
 using Movies.Business.Interfaces;
 using Movies.Domain.DTO;
 using Movies.Domain.Enums.Validation;
+using System.Threading.Tasks;
 
 namespace Movies.API.Controllers
 {
@@ -29,18 +30,21 @@ namespace Movies.API.Controllers
         /// <param name="movieRating"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Post([FromBody]MovieRating movieRating)
+        public async Task<IActionResult> Post([FromBody]MovieRating movieRating)
         {
-            var validationResult = _ratingService.ValidateMovieRating(movieRating);
+            var validationResult = await _ratingService.ValidateMovieRatingAsync(movieRating);
 
             switch (validationResult)
             {
                 case MovieRatingSaveValidationResults.OK:
-                    if (_ratingService.SaveRating(movieRating))
+                    if (await _ratingService.SaveRatingAsync(movieRating))
                     {
                         return Ok();
                     }
-                    return BadRequest("couldn't save rating");
+                    else
+                    {
+                        return BadRequest("couldn't save rating");
+                    }
                 case MovieRatingSaveValidationResults.NullRating:
                 case MovieRatingSaveValidationResults.InvalidMovieId:
                 case MovieRatingSaveValidationResults.InvalidUserId:

@@ -18,9 +18,10 @@ namespace Movies.Repository.Tests.Movie
         public void Should_HonourMovieTitleFilter(string movieTitle, int expectedMovieCount)
         {
             //arrange/act
-            var result = GetRepository().SearchMovies(new MovieSearchCriteria { Title = movieTitle });
+            var asyncResult = GetRepository().SearchMoviesAsync(new MovieSearchCriteria { Title = movieTitle });
 
             //assert
+            var result = asyncResult.Result;
             Assert.IsNotNull(result);
             Assert.AreEqual(expectedMovieCount, result.Count);
             Assert.AreEqual(expectedMovieCount, result.Count(m => m.Title.Contains(movieTitle)));
@@ -33,9 +34,10 @@ namespace Movies.Repository.Tests.Movie
         public void Should_HonourYearOfReleaseFilter(short yearOfrelease, int expectedMovieCount)
         {
             //arrange/act
-            var result = GetRepository().SearchMovies(new MovieSearchCriteria { YearOfRelease = yearOfrelease });
+            var aysncResult = GetRepository().SearchMoviesAsync(new MovieSearchCriteria { YearOfRelease = yearOfrelease });
 
             //assert
+            var result = aysncResult.Result;
             Assert.IsNotNull(result);
             Assert.AreEqual(expectedMovieCount, result.Count);
             Assert.AreEqual(expectedMovieCount, result.Count(m => m.YearOfRelease == yearOfrelease));
@@ -45,9 +47,10 @@ namespace Movies.Repository.Tests.Movie
         public void Should_HonourGenresFilter(List<Genres> genres, int expectedMovieCount)
         {
             //arrange/act
-            var result = GetRepository().SearchMovies(new MovieSearchCriteria { Genres = genres });
+            var asyncResult = GetRepository().SearchMoviesAsync(new MovieSearchCriteria { Genres = genres });
 
             //assert
+            var result = asyncResult.Result;
             Assert.IsNotNull(result);
             Assert.AreEqual(expectedMovieCount, result.Count);
             Assert.AreEqual(expectedMovieCount, result.Count(m => genres.Contains(m.Genre)));
@@ -57,9 +60,10 @@ namespace Movies.Repository.Tests.Movie
         public void Should_HonourMixedFilter(MovieSearchCriteria searchCriteria, int expectedMovieCount)
         {
             //arrange/act
-            var result = GetRepository().SearchMovies(searchCriteria);
+            var asyncResult = GetRepository().SearchMoviesAsync(searchCriteria);
 
             //assert
+            var result = asyncResult.Result;
             Assert.IsNotNull(result);
             Assert.AreEqual(expectedMovieCount, result.Count);
             Assert.AreEqual(expectedMovieCount, result.Count(m => (string.IsNullOrEmpty(searchCriteria.Title) || m.Title.Contains(searchCriteria.Title)) 

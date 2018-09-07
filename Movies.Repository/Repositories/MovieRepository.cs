@@ -1,8 +1,10 @@
-﻿using Movies.Domain.DTO;
+﻿using Microsoft.EntityFrameworkCore;
+using Movies.Domain.DTO;
 using Movies.Domain.Enums;
 using Movies.Repository.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Repo = Movies.Repository.Entities;
 
 namespace Movies.Repository
@@ -11,12 +13,16 @@ namespace Movies.Repository
     {
         public MovieRepository(Context context) : base(context) { }
 
-        public bool MovieExists(int movieId)
+        public async Task<bool> MovieExistsAsync(int movieId)
         {
-            return _context.MovieDbSet.Any(m => m.Id == movieId);
+            Task<bool> task = Task.Run(() => _context.MovieDbSet.Any(m => m.Id == movieId));
+
+            var result = await task;
+
+            return result;
         }
 
-        public List<Movie> SearchMovies(MovieSearchCriteria movieSearchCritera)
+        public async Task<List<Movie>> SearchMoviesAsync(MovieSearchCriteria movieSearchCritera)
         {
             IQueryable<Repo.Movie> query = _context.MovieDbSet
                 .OrderBy(m => m.Title);
@@ -37,7 +43,7 @@ namespace Movies.Repository
                 query = query.Where(m => genreList.Contains(m.GenreId));
             }
 
-            return query.Select(m => new Movie
+            return await query.Select(m => new Movie
                 {
                     AverageRating = m.AverageRating,
                     Genre = (Genres)m.GenreId,
@@ -46,12 +52,12 @@ namespace Movies.Repository
                     Title = m.Title,
                     YearOfRelease = m.YearOfRelease
                 })
-                .ToList();
+                .ToListAsync();
         }
 
-        public List<Movie> TopMovies(byte movieCount)
+        public async Task<List<Movie>> TopMoviesAsync(byte movieCount)
         {
-            return _context.MovieDbSet
+            return await _context.MovieDbSet
                 .OrderByDescending(m => m.AverageRating)
                 .ThenBy(m => m.Title)
                 .Take(movieCount)
@@ -64,18 +70,18 @@ namespace Movies.Repository
                         Title = m.Title,
                         YearOfRelease = m.YearOfRelease
                     })
-                .ToList();
+                .ToListAsync();
         }
 
-        public List<Movie> TopMoviesByUser(byte movieCount, int userId)
+        public async Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, int userId)
         {
-            var test = _context.MovieRatingDbSet
+            var movieRatings = _context.MovieRatingDbSet
                 .Where(mr => mr.UserId == userId)
                 .OrderByDescending(mr => mr.Rating)
                 .ThenBy(mr => mr.Movie.Title)
                 .Take(movieCount);
 
-            return test.Select(mr => new Movie
+            return await movieRatings.Select(mr => new Movie
             {
                 AverageRating = mr.Rating,
                 Genre = (Genres)mr.Movie.GenreId,
@@ -83,7 +89,7 @@ namespace Movies.Repository
                 RunningTime = mr.Movie.RunningTime,
                 Title = mr.Movie.Title,
                 YearOfRelease = mr.Movie.YearOfRelease
-            }).ToList();
+            }).ToListAsync();
 
         }
 

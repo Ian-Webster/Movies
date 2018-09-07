@@ -1,6 +1,7 @@
 ﻿using Movies.Domain.DTO;
 using Movies.Domain.Enums.Validation;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Movies.Business.Tests.RatingService
 {
@@ -15,10 +16,10 @@ namespace Movies.Business.Tests.RatingService
             var expectedResult = MovieRatingSaveValidationResults.NullRating;
 
             //act
-            var result = GetService().ValidateMovieRating(null);
+            var result = GetService().ValidateMovieRatingAsync(null);
 
             //assert
-            Assert.AreEqual(expectedResult, result);
+            Assert.AreEqual(expectedResult, result.Result);
         }
 
         [TestCase(-1, true, 1, true, MovieRatingSaveValidationResults.InvalidMovieId)]
@@ -38,14 +39,14 @@ namespace Movies.Business.Tests.RatingService
                 Rating = 1
             };
 
-            MockUserService.Setup(s => s.UserExists(userId)).Returns(userExists);
-            MockMovieService.Setup(s => s.MovieExists(movieId)).Returns(movieExists);
+            MockUserService.Setup(s => s.UserExistsAsync(userId)).Returns(Task.FromResult(userExists));
+            MockMovieService.Setup(s => s.MovieExistsAsync(movieId)).Returns(Task.FromResult(movieExists));
 
             //act
-            var result = GetService().ValidateMovieRating(movieRating);
+            var result = GetService().ValidateMovieRatingAsync(movieRating);
 
             //assert
-            Assert.AreEqual(expectedResult, result);
+            Assert.AreEqual(expectedResult, result.Result);
         }
 
     }

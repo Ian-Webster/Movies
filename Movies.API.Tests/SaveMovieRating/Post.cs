@@ -6,6 +6,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Movies.API.Tests.SaveMovieRating
 {
@@ -21,12 +22,13 @@ namespace Movies.API.Tests.SaveMovieRating
         public void ShouldReturn_ExpectedActionResultFor_ValidationFailures(MovieRatingSaveValidationResults validationResult)
         {
             //arrange
-            MockRatingService.Setup(s => s.ValidateMovieRating(It.IsAny<MovieRating>())).Returns(validationResult);
+            MockRatingService.Setup(s => s.ValidateMovieRatingAsync(It.IsAny<MovieRating>())).Returns(Task.FromResult(validationResult));
 
             //act
-            var result = GetController().Post(new MovieRating());
+            var asyncResult = GetController().Post(new MovieRating());
 
             //assert
+            var result = asyncResult.Result;
             switch(validationResult)
             {
                 case MovieRatingSaveValidationResults.NullRating:
@@ -46,18 +48,18 @@ namespace Movies.API.Tests.SaveMovieRating
         }
 
         [Test]
-        public void Should_SaveRating()
+        public async Task Should_SaveRatingAsync()
         {
             //arrange
             var rating = new MovieRating { MovieId = 1, Rating = 2, UserId = 3 };
 
-            MockRatingService.Setup(s => s.ValidateMovieRating(rating)).Returns(MovieRatingSaveValidationResults.OK);
+            MockRatingService.Setup(s => s.ValidateMovieRatingAsync(rating)).Returns(Task.FromResult(MovieRatingSaveValidationResults.OK));
 
             //act
-            GetController().Post(rating);
+            await GetController().Post(rating);
 
             //assert
-            MockRatingService.Verify(s => s.ValidateMovieRating(rating), Times.Once);
+            MockRatingService.Verify(s => s.ValidateMovieRatingAsync(rating), Times.Once);
         }
 
         [TestCase(true)]
@@ -67,13 +69,14 @@ namespace Movies.API.Tests.SaveMovieRating
             //arrange
             var rating = new MovieRating { MovieId = 1, Rating = 2, UserId = 3 };
 
-            MockRatingService.Setup(s => s.ValidateMovieRating(rating)).Returns(MovieRatingSaveValidationResults.OK);
-            MockRatingService.Setup(s => s.SaveRating(rating)).Returns(saved);
+            MockRatingService.Setup(s => s.ValidateMovieRatingAsync(rating)).Returns(Task.FromResult(MovieRatingSaveValidationResults.OK));
+            MockRatingService.Setup(s => s.SaveRatingAsync(rating)).Returns(Task.FromResult(saved));
 
             //act
-            var result = GetController().Post(rating);
+            var asyncResult = GetController().Post(rating);
 
             //assert
+            var result = asyncResult.Result;
             if (saved)
             {
                 Assert.IsInstanceOf<OkResult>(result);

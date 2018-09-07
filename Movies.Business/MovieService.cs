@@ -5,6 +5,7 @@ using Movies.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Movies.Business
 {
@@ -19,17 +20,17 @@ namespace Movies.Business
             _userService = userService;
         }
 
-        public bool MovieExists(int movieId)
+        public async Task<bool> MovieExistsAsync(int movieId)
         {
             if (movieId <= 0)
             {
                 throw new ArgumentException("moveId must be greater than zero", "movieId");
             }
 
-            return _movieRepository.MovieExists(movieId);
+            return await _movieRepository.MovieExistsAsync(movieId);
         }
 
-        public List<Movie> SearchMovies(MovieSearchCriteria movieSearchCriteria)
+        public async Task<List<Movie>> SearchMoviesAsync(MovieSearchCriteria movieSearchCriteria)
         {
             var validationResult = ValidateSearchCriteria(movieSearchCriteria);
             if (validationResult == MovieSearchValidationResults.NoCriteria)
@@ -42,20 +43,20 @@ namespace Movies.Business
                 throw new ArgumentException("movieSearchCriteria must have at least one search criteria", "movieSearchCriteria");
             }
 
-            return _movieRepository.SearchMovies(movieSearchCriteria);
+            return await _movieRepository.SearchMoviesAsync(movieSearchCriteria);
         }
 
-        public List<Movie> TopMovies(byte movieCount)
+        public async Task<List<Movie>> TopMoviesAsync(byte movieCount)
         {
             if (movieCount == 0)
             {
                 throw new ArgumentException("movieCount must be greater than zero", "movieCount");
             }
 
-            return _movieRepository.TopMovies(movieCount);
+            return await _movieRepository.TopMoviesAsync(movieCount);
         }
 
-        public List<Movie> TopMoviesByUser(byte movieCount, int userId)
+        public async Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, int userId)
         {
             if (movieCount == 0)
             {
@@ -67,12 +68,12 @@ namespace Movies.Business
                 throw new ArgumentException("userId must be greater than zero", "userId");
             }
 
-            if (!_userService.UserExists(userId))
+            if (! await _userService.UserExistsAsync(userId))
             {
                 throw new ArgumentException($"User not found for userId {userId}", "userId");
             }
 
-            return _movieRepository.TopMoviesByUser(movieCount, userId);
+            return await _movieRepository.TopMoviesByUserAsync(movieCount, userId);
         }
 
         public MovieSearchValidationResults ValidateSearchCriteria(MovieSearchCriteria movieSearchCriteria)

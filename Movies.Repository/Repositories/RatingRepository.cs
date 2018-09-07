@@ -1,6 +1,7 @@
 ﻿using Movies.Domain.DTO;
 using Movies.Repository.Interfaces;
 using System.Linq;
+using System.Threading.Tasks;
 using Repo = Movies.Repository.Entities;
 
 namespace Movies.Repository
@@ -9,7 +10,7 @@ namespace Movies.Repository
     {
         public RatingRepository(Context context) : base(context) { }
 
-        public bool SaveRating(MovieRating movieRating)
+        public async Task<bool> SaveRatingAsync(MovieRating movieRating)
         {
             var rating = _context.MovieRatingDbSet.FirstOrDefault(mr => mr.MovieId == movieRating.MovieId && mr.UserId == movieRating.UserId);
 
@@ -29,7 +30,7 @@ namespace Movies.Repository
                 _context.MovieRatingDbSet.Add(rating);
             }
 
-            return _context.SaveChanges() > 0;
+            return await _context.SaveChangesAsync() > 0;
         }
 
     }

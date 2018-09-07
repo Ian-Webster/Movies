@@ -4,6 +4,7 @@ using Movies.Domain.DTO;
 using Movies.Domain.Enums.Validation;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Movies.API.Controllers
 {
@@ -33,7 +34,7 @@ namespace Movies.API.Controllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(List<Movie>))]
-        public IActionResult Get(MovieSearchCriteria criteria)
+        public async Task<IActionResult> Get(MovieSearchCriteria criteria)
         {
             var validationResult = _movieService.ValidateSearchCriteria(criteria);
 
@@ -44,7 +45,7 @@ namespace Movies.API.Controllers
                     return BadRequest(validationResult.ToString());                
             }
 
-            var movies = _movieService.SearchMovies(criteria);
+            var movies = await _movieService.SearchMoviesAsync(criteria);
 
             if (movies == null || !movies.Any())
             {

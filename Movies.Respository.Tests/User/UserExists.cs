@@ -27,9 +27,10 @@ namespace Movies.Repository.Tests.User
             }
 
             //act
-            var result = GetRepository().UserExists(userId);
+            var asyncResult = GetRepository().UserExistsAsync(userId);
 
             //assert
+            var result = asyncResult.Result;
             if(userExists)
             {
                 Assert.IsTrue(result);

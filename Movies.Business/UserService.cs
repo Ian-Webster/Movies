@@ -1,6 +1,7 @@
 ﻿using Movies.Business.Interfaces;
 using Movies.Repository.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace Movies.Business
 {
@@ -13,14 +14,14 @@ namespace Movies.Business
             _userRepository = userRepository;
         }
 
-        public bool UserExists(int userId)
+        public async Task<bool> UserExistsAsync(int userId)
         {
             if (userId <= 0)
             {
                 throw new ArgumentException("userId must be greater than zero", "userId");
             }
 
-            return _userRepository.UserExists(userId);
+            return await _userRepository.UserExistsAsync(userId);
         }
     }
 }

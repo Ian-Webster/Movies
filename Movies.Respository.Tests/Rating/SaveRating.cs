@@ -16,7 +16,7 @@ namespace Movies.Repository.Tests.Rating
             var rating = new MovieRating { MovieId = 1, Rating = 2, UserId = 3 };
 
             //act
-            GetRepository().SaveRating(rating);
+            GetRepository().SaveRatingAsync(rating);
 
             var ratingCount = 0;
             var firstRating = new Repo.MovieRating();
@@ -46,7 +46,7 @@ namespace Movies.Repository.Tests.Rating
             InsertRating(existingRating);
 
             //act
-            GetRepository().SaveRating(newRating);
+            GetRepository().SaveRatingAsync(newRating);
 
             var ratingCount = 0;
             var firstRating = new Repo.MovieRating();
