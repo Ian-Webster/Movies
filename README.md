@@ -1,4 +1,5 @@
 
+
 # Movies
 
 API for movie ratings.
@@ -55,9 +56,9 @@ I've enabled documentation for swagger so hopefully the swagger UI should provid
 
 **Future Improvements**
  - Front end project (probably using Angular)
- - Unit tests for the API project
- - Unit tests for the Repository project
- - Implement Async through out the solution
+ - ~~Unit tests for the API project~~
+ - ~~Unit tests for the Repository project~~
+ - ~~Implement Async through out the solution~~
  - Additional APIs
 	 - Movie add / edit
 	 - User add / edit
