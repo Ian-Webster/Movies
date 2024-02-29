@@ -7,7 +7,7 @@ on:
         - '!main'
 
 jobs:
-  build_BankOCR:
+  build_Movies:
 
     runs-on: ubuntu-latest
 
