@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2027
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movies.Domain", "Movies.Domain\Movies.Domain.csproj", "{A303492D-308F-4376-99D2-F2E366DAB27B}"
 EndProject
@@ -14,8 +14,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movies.API", "Movies.API\Movies.API.csproj", "{5B3A8110-A561-4BE0-A9D0-B55C14C1EF3A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movies.Infrastructure", "Movies.Infrastructure\Movies.Infrastructure.csproj", "{7B07B26A-2C90-408A-815C-09B319B31EAF}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Movies.Database", "Movies.Database\Movies.Database.sqlproj", "{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movies.API.Tests", "Movies.API.Tests\Movies.API.Tests.csproj", "{27C48BF0-5E73-4BEF-9C95-40845E22AC45}"
 EndProject
@@ -51,12 +49,6 @@ Global
 		{7B07B26A-2C90-408A-815C-09B319B31EAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B07B26A-2C90-408A-815C-09B319B31EAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B07B26A-2C90-408A-815C-09B319B31EAF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{27C48BF0-5E73-4BEF-9C95-40845E22AC45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{27C48BF0-5E73-4BEF-9C95-40845E22AC45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27C48BF0-5E73-4BEF-9C95-40845E22AC45}.Release|Any CPU.ActiveCfg = Release|Any CPU
