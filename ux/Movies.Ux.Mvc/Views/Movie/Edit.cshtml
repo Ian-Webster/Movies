@@ -5,57 +5,40 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Movie</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
+<div class="card" style="margin-top:25px">
+    <div class="card-body">
+        <h1 class="card-title">Edit @Model.Title</h1>
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Title" class="control-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="YearOfRelease" class="control-label">Year of Release</label>
+                        <input asp-for="YearOfRelease" class="form-control" />
+                        <span asp-validation-for="YearOfRelease" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Genre" class="control-label"></label>
+                        @Html.DropDownListFor(m => m.Genre, (SelectList)ViewBag.GenreSelectList, new { @class = "form-control" })
+                        <span asp-validation-for="Genre" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="RunningTime" class="control-label"></label>
+                        <input asp-for="RunningTime" class="form-control" />
+                        <span asp-validation-for="RunningTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" style="margin-top:10px">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="YearOfRelease" class="control-label">Year of Release</label>
-                <input asp-for="YearOfRelease" class="form-control" />
-                <span asp-validation-for="YearOfRelease" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Genre" class="control-label"></label>
-                @Html.DropDownListFor(m => m.Genre, (SelectList)ViewBag.GenreSelectList)
-                <span asp-validation-for="Genre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RunningTime" class="control-label"></label>
-                <input asp-for="RunningTime" class="form-control" />
-                <span asp-validation-for="RunningTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AverageRating" class="control-label"></label>
-                <input asp-for="AverageRating" class="form-control" />
-                <span asp-validation-for="AverageRating" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AverageRatingForDisplay" class="control-label"></label>
-                <input asp-for="AverageRatingForDisplay" class="form-control" />
-                <span asp-validation-for="AverageRatingForDisplay" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
