@@ -42,5 +42,7 @@ namespace Movies.Repository.Interfaces
         Task<bool> SaveMovieAsync(Movie movie);
 
         Task<Movie> GetMovieAsync(int movieId);
+
+        Task<List<Movie>> GetMoviesAsync();
     }
 }

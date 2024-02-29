@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Movies.Business.Interfaces;
 using Movies.Domain.DTO;
+using Movies.Domain.Enums;
 
 namespace Movies.Ux.Mvc.Controllers
 {
@@ -14,9 +16,10 @@ namespace Movies.Ux.Mvc.Controllers
         }
 
         // GET: MovieController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var movies = await _movieService.GetMoviesAsync();
+            return View(movies);
         }
 
         // GET: MovieController/Details/5
@@ -38,6 +41,7 @@ namespace Movies.Ux.Mvc.Controllers
         // GET: MovieController/Create
         public ActionResult Create()
         {
+            SetGenreSelectList();
             return View();
         }
 
@@ -61,6 +65,7 @@ namespace Movies.Ux.Mvc.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             var movie = await _movieService.GetMovieAsync(id);
+            SetGenreSelectList();
             return movie != null? View(movie) : NotFound();
         }
 
@@ -72,6 +77,11 @@ namespace Movies.Ux.Mvc.Controllers
             var movieUpdated = await _movieService.SaveMovieAsync(movie);
 
             return movieUpdated ? RedirectToAction(nameof(Details), new {id = movie.Id}) : BadRequest("unable to save movie");
+        }
+
+        private void SetGenreSelectList()
+        {
+            ViewBag.GenreSelectList = new SelectList(Enum.GetValues(typeof(Genres)));
         }
 
     }

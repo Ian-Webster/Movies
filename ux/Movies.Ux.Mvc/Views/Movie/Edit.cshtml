@@ -24,13 +24,13 @@
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="YearOfRelease" class="control-label"></label>
+                <label asp-for="YearOfRelease" class="control-label">Year of Release</label>
                 <input asp-for="YearOfRelease" class="form-control" />
                 <span asp-validation-for="YearOfRelease" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Genre" class="control-label"></label>
-                <input asp-for="Genre" class="form-control" />
+                @Html.DropDownListFor(m => m.Genre, (SelectList)ViewBag.GenreSelectList)
                 <span asp-validation-for="Genre" class="text-danger"></span>
             </div>
             <div class="form-group">

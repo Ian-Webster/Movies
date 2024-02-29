@@ -125,5 +125,21 @@ namespace Movies.Repository
 
             return await result.FirstOrDefaultAsync();
         }
+
+        public async Task<List<Movie>> GetMoviesAsync()
+        {
+            return await _context.MovieDbSet
+                .OrderBy(m => m.Title)
+                .Select(m => new Movie
+                {
+                    AverageRating = m.AverageRating,
+                    Genre = (Genres)m.GenreId,
+                    Id = m.Id,
+                    RunningTime = m.RunningTime,
+                    Title = m.Title,
+                    YearOfRelease = m.YearOfRelease
+                })
+                .ToListAsync();
+        }
     }
 }
