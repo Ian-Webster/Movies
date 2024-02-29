@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movies.Repository.Tests", "
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Movies.Database", "Movies.Database\Movies.Database.sqlproj", "{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{FA6068C7-833D-4F6B-BD8E-44ADE5C222BC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ux", "ux", "{FA6068C7-833D-4F6B-BD8E-44ADE5C222BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,7 +62,6 @@ Global
 		{9C165A02-6274-47DB-84B0-B2523F300790}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C165A02-6274-47DB-84B0-B2523F300790}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5235B45-EA07-4CCA-B7AE-F0BC5E71C122}.Release|Any CPU.Build.0 = Release|Any CPU
