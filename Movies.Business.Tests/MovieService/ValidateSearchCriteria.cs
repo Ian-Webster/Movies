@@ -15,7 +15,7 @@ namespace Movies.Business.Tests.MovieService
             var result = GetService().ValidateSearchCriteria(null);
 
             //assert
-            Assert.AreEqual(result, MovieSearchValidationResults.NoCriteria);
+            Assert.That(result, Is.EqualTo(MovieSearchValidationResults.NoCriteria));
         }
 
         [TestCase("test", 0, false, MovieSearchValidationResults.OK)]
@@ -36,7 +36,7 @@ namespace Movies.Business.Tests.MovieService
             var result = GetService().ValidateSearchCriteria(criteria);
 
             //assert
-            Assert.AreEqual(result, expectedResult);
+            Assert.That(result, Is.EqualTo(expectedResult));
         }
 
     }

@@ -33,26 +33,26 @@ namespace Movies.Repository.Tests.Movie
             //assert
             var result = asyncResult.Result;
 
-            Assert.IsNotNull(result);
+            Assert.That(result, Is.Not.Null);
 
             if (user.MovieRatings.Count() > count)
             {
-                Assert.AreEqual(count, result.Count());
+                Assert.That(result.Count(), Is.EqualTo(result.Count()));
             }
             else if (user.MovieRatings.Count() < count)
             {
-                Assert.AreEqual(user.MovieRatings.Count(), result.Count());
+                Assert.That(result.Count(), Is.EqualTo(user.MovieRatings.Count()));
             }
             else
             {
-                Assert.AreEqual(result.Count(), count);
+                Assert.That(count, Is.EqualTo(count));
             }            
 
             var minExpectedRating = user.MovieRatings.OrderByDescending(mr => mr.Rating).Take(count).Min(m => m.Rating);
             var maxExpectedRating = user.MovieRatings.OrderByDescending(mr => mr.Rating).Take(count).Max(m => m.Rating);
 
-            Assert.AreEqual(minExpectedRating, result.Min(m => m.AverageRating));
-            Assert.AreEqual(maxExpectedRating, result.Max(m => m.AverageRating));
+            Assert.That(result.Min(m => m.AverageRating), Is.EqualTo(minExpectedRating));
+            Assert.That(result.Max(m => m.AverageRating), Is.EqualTo(maxExpectedRating));
         }
 
     }

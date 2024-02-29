@@ -21,7 +21,7 @@ namespace Movies.Business.Tests.MovieService
             };
 
             //act/assert
-            Assert.AreEqual(expectedRoundedValue, movie.AverageRatingForDisplay);
+            Assert.That(expectedRoundedValue, Is.EqualTo(movie.AverageRatingForDisplay));
         }
 
     }

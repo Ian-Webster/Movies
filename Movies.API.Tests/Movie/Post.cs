@@ -25,11 +25,11 @@ namespace Movies.API.Tests.Movie
 
             if (isSaved)
             {
-                Assert.IsInstanceOf<OkResult>(result);
+                Assert.That(result, Is.InstanceOf<OkResult>());
             }
             else
             {
-                Assert.IsInstanceOf<BadRequestObjectResult>(result);
+                Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
             }
         }
 

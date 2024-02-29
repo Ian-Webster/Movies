@@ -19,7 +19,7 @@ namespace Movies.Business.Tests.RatingService
             var result = GetService().ValidateMovieRatingAsync(null);
 
             //assert
-            Assert.AreEqual(expectedResult, result.Result);
+            Assert.That(expectedResult, Is.EqualTo(result.Result));
         }
 
         [TestCase(-1, true, 1, true, MovieRatingSaveValidationResults.InvalidMovieId)]
@@ -46,7 +46,7 @@ namespace Movies.Business.Tests.RatingService
             var result = GetService().ValidateMovieRatingAsync(movieRating);
 
             //assert
-            Assert.AreEqual(expectedResult, result.Result);
+            Assert.That(expectedResult, Is.EqualTo(result.Result));
         }
 
     }

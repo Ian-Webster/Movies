@@ -20,7 +20,7 @@ namespace Movies.API.Tests.TopMovies
 
             //assert
             var result = asyncResult.Result;
-            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace Movies.API.Tests.TopMovies
 
             //assert
             var result = asyncResult.Result;
-            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+            Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace Movies.API.Tests.TopMovies
 
             //assert
             var result = asyncResult.Result;
-            Assert.IsInstanceOf<NotFoundResult>(result);
+            Assert.That(result, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace Movies.API.Tests.TopMovies
 
             //assert
             var result = asyncResult.Result;
-            Assert.IsInstanceOf<JsonResult>(result);
+            Assert.That(result, Is.InstanceOf<JsonResult>());
         }
     }
 }

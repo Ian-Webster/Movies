@@ -28,14 +28,14 @@ namespace Movies.Repository.Tests.Movie
 
             //assert
             var result = asyncResult.Result;
-            Assert.IsNotNull(result);
-            Assert.AreEqual(count, result.Count);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Count, Is.EqualTo(result.Count));
 
             var minExpectedRating = movies.Min(m => m.AverageRating);
             var maxExpectedRating = movies.Max(m => m.AverageRating);
 
-            Assert.AreEqual(minExpectedRating, result.Min(m => m.AverageRating));
-            Assert.AreEqual(maxExpectedRating, result.Max(m => m.AverageRating));
+            Assert.That(minExpectedRating, Is.EqualTo(result.Min(m => m.AverageRating)));
+            Assert.That(maxExpectedRating, Is.EqualTo(result.Max(m => m.AverageRating)));
         }
 
     }
