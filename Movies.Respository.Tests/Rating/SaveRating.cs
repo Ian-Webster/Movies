@@ -28,12 +28,12 @@ namespace Movies.Repository.Tests.Rating
             }
 
             //assert
-            Assert.AreEqual(1, ratingCount);
+            Assert.That(1, Is.EqualTo(ratingCount));
 
-            Assert.IsNotNull(firstRating);
-            Assert.AreEqual(rating.MovieId, firstRating.MovieId);
-            Assert.AreEqual(rating.Rating, firstRating.Rating);
-            Assert.AreEqual(rating.UserId, firstRating.UserId);
+            Assert.That(firstRating, Is.Not.Null);
+            Assert.That(rating.MovieId, Is.EqualTo(firstRating.MovieId));
+            Assert.That(rating.Rating, Is.EqualTo(firstRating.Rating));
+            Assert.That(rating.UserId, Is.EqualTo(firstRating.UserId));
         }
 
         [Test]
@@ -58,12 +58,12 @@ namespace Movies.Repository.Tests.Rating
             }
 
             //assert
-            Assert.AreEqual(1, ratingCount);
+            Assert.That(1, Is.EqualTo(ratingCount));
 
-            Assert.IsNotNull(firstRating);
-            Assert.AreEqual(existingRating.MovieId, firstRating.MovieId);
-            Assert.AreEqual(newRating.Rating, firstRating.Rating);
-            Assert.AreEqual(existingRating.UserId, firstRating.UserId);
+            Assert.That(firstRating, Is.Not.Null);
+            Assert.That(existingRating.MovieId, Is.EqualTo(firstRating.MovieId));
+            Assert.That(newRating.Rating, Is.EqualTo(firstRating.Rating));
+            Assert.That(existingRating.UserId, Is.EqualTo(firstRating.UserId));
         }
 
     }

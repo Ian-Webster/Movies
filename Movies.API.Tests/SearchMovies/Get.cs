@@ -29,9 +29,9 @@ namespace Movies.API.Tests.SearchMovies
             {
                 case MovieSearchValidationResults.InvalidCriteria:
                 case MovieSearchValidationResults.NoCriteria:
-                    Assert.IsInstanceOf<BadRequestObjectResult>(result);
+                    Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
                     var badRequest = result as BadRequestObjectResult;
-                    Assert.AreEqual(validationResult.ToString(), badRequest.Value);
+                    Assert.That(validationResult.ToString(), Is.EqualTo(badRequest.Value));
                     break;
             }
         }
@@ -56,7 +56,7 @@ namespace Movies.API.Tests.SearchMovies
 
             //assert
             var result = asyncResult.Result;
-            Assert.IsInstanceOf<NotFoundResult>(result);
+            Assert.That(result, Is.InstanceOf<NotFoundResult>());
 
         }
 
@@ -72,7 +72,7 @@ namespace Movies.API.Tests.SearchMovies
 
             //assert
             var jsonResult = jsonAsyncResult.Result;
-            Assert.IsInstanceOf<JsonResult>(jsonResult);
+            Assert.That(jsonResult, Is.InstanceOf<JsonResult>());
         }
     }
 }

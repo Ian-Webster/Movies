@@ -1,9 +1,6 @@
 ﻿using NUnit.Framework;
 using dto = Movies.Domain.DTO;
 using repo = Movies.Repository.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Movies.Domain.Enums;
 using System.Linq;
 
@@ -37,11 +34,11 @@ namespace Movies.Repository.Tests.Movie
                 lastMovie = context.MovieDbSet.OrderBy(m => m.Id).Last();
             }
 
-            Assert.AreEqual(existingMovieCount + 1, newMovieCount);
-            Assert.AreEqual(newMovie.Genre, (Genres)lastMovie.GenreId);
-            Assert.AreEqual(newMovie.RunningTime, lastMovie.RunningTime);
-            Assert.AreEqual(newMovie.Title, lastMovie.Title);
-            Assert.AreEqual(newMovie.YearOfRelease, lastMovie.YearOfRelease);
+            Assert.That(existingMovieCount + 1, Is.EqualTo(newMovieCount));
+            Assert.That(newMovie.Genre, Is.EqualTo((Genres)lastMovie.GenreId));
+            Assert.That(newMovie.RunningTime, Is.EqualTo(lastMovie.RunningTime));
+            Assert.That(newMovie.Title, Is.EqualTo(lastMovie.Title));
+            Assert.That(newMovie.YearOfRelease, Is.EqualTo(lastMovie.YearOfRelease));
         }
 
         [Test]
@@ -77,11 +74,11 @@ namespace Movies.Repository.Tests.Movie
                 updatedExistingMovie = context.MovieDbSet.Find(existingMovie.Id);
             }
 
-            Assert.AreEqual(existingMovieCount, newMovieCount);            
-            Assert.AreEqual(updatedMovie.Genre, (Genres)updatedExistingMovie.GenreId);
-            Assert.AreEqual(updatedMovie.RunningTime, updatedExistingMovie.RunningTime);
-            Assert.AreEqual(updatedMovie.Title, updatedExistingMovie.Title);
-            Assert.AreEqual(updatedMovie.YearOfRelease, updatedExistingMovie.YearOfRelease);
+            Assert.That(existingMovieCount, Is.EqualTo(newMovieCount));            
+            Assert.That(updatedMovie.Genre, Is.EqualTo((Genres)updatedExistingMovie.GenreId));
+            Assert.That(updatedMovie.RunningTime, Is.EqualTo(updatedExistingMovie.RunningTime));
+            Assert.That(updatedMovie.Title, Is.EqualTo(updatedExistingMovie.Title));
+            Assert.That(updatedMovie.YearOfRelease, Is.EqualTo(updatedExistingMovie.YearOfRelease));
         }
 
     }

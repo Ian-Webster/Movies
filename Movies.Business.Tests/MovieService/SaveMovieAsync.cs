@@ -38,11 +38,11 @@ namespace Movies.Business.Tests.MovieService
             var result = asyncResult.Result;
             if (saveSuccess)
             {
-                Assert.IsTrue(result);
+                Assert.That(result, Is.True);
             }
             else
             {
-                Assert.IsFalse(result);
+                Assert.That(result, Is.False);
             }
         }
 

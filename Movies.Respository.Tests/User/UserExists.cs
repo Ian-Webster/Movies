@@ -33,11 +33,11 @@ namespace Movies.Repository.Tests.User
             var result = asyncResult.Result;
             if(userExists)
             {
-                Assert.IsTrue(result);
+                Assert.That(result, Is.True);
             }
             else
             {
-                Assert.IsFalse(result);
+                Assert.That(result, Is.False);
             }
         }
 

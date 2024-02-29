@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Movies.Repository.Tests.Movie
 {
@@ -8,7 +9,7 @@ namespace Movies.Repository.Tests.Movie
     {
         [TestCase(true)]
         [TestCase(false)]
-        public void Should_ReturnTrueWhenMoviesExists(bool moviesExists)
+        public async Task Should_ReturnTrue_WhenMoviesExists(bool moviesExists)
         {
             //arrange
             var movieId = 0;
@@ -25,16 +26,16 @@ namespace Movies.Repository.Tests.Movie
             }
 
             //act
-            var result = GetRepository().MovieExistsAsync(movieId);
+            var result = await GetRepository().MovieExistsAsync(movieId);
 
             //assert
             if (moviesExists)
             {
-                Assert.IsTrue(result.Result);
+                Assert.That(result, Is.True);
             }
             else
             {
-                Assert.IsFalse(result.Result);
+                Assert.That(result, Is.False);
             }
         }
 

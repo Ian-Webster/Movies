@@ -1,0 +1,35 @@
+name: Movies - branch actions
+
+on:
+    push:
+      branches:
+        - '*'
+        - '!main'
+
+jobs:
+  build_Movies:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x        
+
+    # Resource NuGet dependencies
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    # Build project
+    - name: Build 
+      run: dotnet build
+
+    # Execute all unit tests in the solution
+    - name: Execute unit tests
+      run: dotnet test

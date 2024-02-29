@@ -1,12 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Movies.Domain\Movies.Domain.csproj" />
     <ProjectReference Include="..\Movies.Repository\Movies.Repository.csproj" />
   </ItemGroup>
-
 </Project>

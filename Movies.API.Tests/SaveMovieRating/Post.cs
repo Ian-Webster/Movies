@@ -34,15 +34,15 @@ namespace Movies.API.Tests.SaveMovieRating
                 case MovieRatingSaveValidationResults.NullRating:
                 case MovieRatingSaveValidationResults.InvalidMovieId:
                 case MovieRatingSaveValidationResults.InvalidUserId:
-                    Assert.IsInstanceOf<BadRequestObjectResult>(result);
+                    Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
                     var badRequest = result as BadRequestObjectResult;
-                    Assert.AreEqual(validationResult.ToString(), badRequest.Value);
+                    Assert.That(validationResult.ToString(), Is.EqualTo(badRequest.Value));
                     break;
                 case MovieRatingSaveValidationResults.MovieNotfound:
                 case MovieRatingSaveValidationResults.UserNotFound:
-                    Assert.IsInstanceOf<NotFoundObjectResult>(result);
+                    Assert.That(result, Is.InstanceOf<NotFoundObjectResult>());
                     var notFound = result as NotFoundObjectResult;
-                    Assert.AreEqual(validationResult.ToString(), notFound.Value);
+                    Assert.That(validationResult.ToString(), Is.EqualTo(notFound.Value));
                     break;
             }
         }
@@ -79,11 +79,11 @@ namespace Movies.API.Tests.SaveMovieRating
             var result = asyncResult.Result;
             if (saved)
             {
-                Assert.IsInstanceOf<OkResult>(result);
+                Assert.That(result, Is.InstanceOf<OkResult>());
             }
             else
             {
-                Assert.IsInstanceOf<BadRequestObjectResult>(result);
+                Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
             }
         }
 
