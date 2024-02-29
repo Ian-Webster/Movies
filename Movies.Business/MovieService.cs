@@ -97,5 +97,10 @@ namespace Movies.Business
         {
             return await _movieRepository.SaveMovieAsync(movie);
         }
+
+        public async Task<Movie> GetMovieAsync(int movieId)
+        {
+            return await _movieRepository.GetMovieAsync(movieId);
+        }
     }
 }

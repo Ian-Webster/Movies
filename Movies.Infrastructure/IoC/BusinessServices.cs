@@ -7,7 +7,7 @@ namespace Movies.Infrastructure.IoC
     public static class BusinessServices
     {
 
-        public static IServiceCollection Configure(this IServiceCollection services)
+        public static IServiceCollection ConfigureBusinessServices(this IServiceCollection services)
         {
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IRatingService, RatingService>();

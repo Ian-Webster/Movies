@@ -109,5 +109,21 @@ namespace Movies.Repository
             return await _context.SaveChangesAsync() > 0;
         }
 
+        public async Task<Movie> GetMovieAsync(int movieId)
+        {
+            var result = _context.MovieDbSet
+                .Where(m => m.Id == movieId)
+                .Select(m => new Movie
+                {
+                    AverageRating = m.AverageRating,
+                    Genre = (Genres)m.GenreId,
+                    Id = m.Id,
+                    RunningTime = m.RunningTime,
+                    Title = m.Title,
+                    YearOfRelease = m.YearOfRelease
+                });
+
+            return await result.FirstOrDefaultAsync();
+        }
     }
 }

@@ -40,5 +40,7 @@ namespace Movies.Repository.Interfaces
         /// <param name="movie"></param>
         /// <returns></returns>
         Task<bool> SaveMovieAsync(Movie movie);
+
+        Task<Movie> GetMovieAsync(int movieId);
     }
 }

@@ -42,8 +42,8 @@ namespace Movies.API
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services = Repositories.Configure(services);
-            services = BusinessServices.Configure(services);            
+            services = Repositories.ConfigureRepositories(services);
+            services = BusinessServices.ConfigureBusinessServices(services);            
 
             services.AddMvc();
 
