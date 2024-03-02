@@ -4,8 +4,9 @@ using Movies.Business.Interfaces;
 using Movies.Domain.DTO;
 using Movies.Domain.Enums;
 
-namespace Movies.Ux.Mvc.Controllers
+namespace Movies.Ux.Mvc.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class MovieController : Controller
     {
         private readonly IMovieService _movieService;
@@ -53,7 +54,7 @@ namespace Movies.Ux.Mvc.Controllers
             var movieAdded = await _movieService.SaveMovieAsync(movie);
             if (movieAdded)
             {
-                return RedirectToAction(nameof(Details), new {id = movie.Id});
+                return RedirectToAction(nameof(Details), new { id = movie.Id });
             }
             else
             {
@@ -66,7 +67,7 @@ namespace Movies.Ux.Mvc.Controllers
         {
             var movie = await _movieService.GetMovieAsync(id);
             SetGenreSelectList();
-            return movie != null? View(movie) : NotFound();
+            return movie != null ? View(movie) : NotFound();
         }
 
         // POST: MovieController/Edit/5
@@ -76,7 +77,7 @@ namespace Movies.Ux.Mvc.Controllers
         {
             var movieUpdated = await _movieService.SaveMovieAsync(movie);
 
-            return movieUpdated ? RedirectToAction(nameof(Details), new {id = movie.Id}) : BadRequest("unable to save movie");
+            return movieUpdated ? RedirectToAction(nameof(Details), new { id = movie.Id }) : BadRequest("unable to save movie");
         }
 
         private void SetGenreSelectList()

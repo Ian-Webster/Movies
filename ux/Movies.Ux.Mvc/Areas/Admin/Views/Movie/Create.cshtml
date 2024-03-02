@@ -1,0 +1,26 @@
+﻿@model Movies.Domain.DTO.Movie
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card" style="margin-top:25px">
+    <div class="card-body">
+        <h2 class="card-title">Create new Movie</h2>
+        <div class="row">
+            <div class="col-md-4">
+                @using (Html.BeginForm("Create", "Movie", new { area = "Admin" }))
+                {
+                    <div class="form-group">
+                        <label asp-for="Id" class="control-label">Id</label>
+                        @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } })
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    @await Html.PartialAsync("_MovieFormFields")
+                    @await Html.PartialAsync("_formButtons")
+                }
+            </div>
+        </div>
+    </div>
+</div>

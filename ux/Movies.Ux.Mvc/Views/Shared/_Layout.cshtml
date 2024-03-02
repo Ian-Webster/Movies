@@ -20,10 +20,17 @@
             <div class="navbar-collapse collapse" id="navbarsExample01" style="">
                 <ul class="navbar-nav me-auto mb-2">
                     <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Movie" asp-action="Index">Movies</a>
+                        <a class="nav-link" asp-area="Admin" asp-controller="Movie" asp-action="Index">Movies Admin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" 
+                           asp-area="" 
+                           asp-controller="MovieRating" 
+                           asp-action="TopX" 
+                           asp-all-route-data='new Dictionary<string, string> { {"movieCount", "5"} }'>Top 5 Movies</a>
                     </li>
                 </ul>
             </div>

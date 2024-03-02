@@ -7,9 +7,9 @@
 
 <div class="card" style="margin-top:25px">
     <div class="card-body">
-        <h1 class="card-title">Movies</h1>
+        <h2 class="card-title">Movies</h2>
         <p>
-            <a asp-action="Create" class="btn btn-primary">Create New</a>
+            @Html.ActionLink("Create", "Create", null, null, new { @class = "btn btn-primary" })
         </p>
         <table class="display" id="dgMovies" style="width:100%">
             <thead>
@@ -28,9 +28,6 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.RunningTime)
-                </th>
-                <th>
-                    Average Rating
                 </th>
                 <th></th>
             </tr>
@@ -52,9 +49,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.RunningTime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AverageRatingForDisplay)
                     </td>
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" })
