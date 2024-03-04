@@ -21,7 +21,7 @@
                         @Html.DisplayFor(modelItem => item.AverageRatingForDisplay)
                     </td>
                     <td>
-                        @Html.ActionLink("View", "Details", controllerName: "Movie", new { id = item.Id })
+                        @Html.ActionLink("View", "Details", controllerName: "Movie", new { id = item.Id }, new { @class = "btn btn-primary" })
                     </td>
                 </tr>
             }
