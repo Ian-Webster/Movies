@@ -43,7 +43,7 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
         public ActionResult Create()
         {
             SetGenreSelectList();
-            return View();
+            return View(new Movie{ Id = Guid.NewGuid()});
         }
 
         // POST: MovieController/Create
