@@ -95,7 +95,7 @@ namespace Movies.Repository
 
         public async Task<bool> SaveMovieAsync(Movie movie)
         {
-            var movieDao = _context.MovieDbSet.Find(movie.Id);
+            var movieDao = movie.Id > 0 ? await _context.MovieDbSet.FindAsync(movie.Id): null;
             if (movieDao == null)
             {
                 movieDao = new Repo.Movie();

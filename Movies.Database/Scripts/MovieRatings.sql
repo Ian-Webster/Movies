@@ -1,6 +1,6 @@
 ﻿DELETE FROM MovieRating
 
-DECLARE @LastUserId int = (select max(Id) from [User])
+DECLARE @LastUserId UNIQUEIDENTIFIER = (select top 1 Id from [User])
 
 --insert dummy movie ratings
 INSERT INTO MovieRating
@@ -8,7 +8,7 @@ SELECT	mve.Id as MovieId,
 		usr.id as UserId,
 		((10 - 0) * RAND(convert(varbinary, newid())) + 0) as Rating
 FROM	Movie mve
-JOIN	[user] usr on usr.id > 0 AND usr.Id < @LastUserId --leave the last user so that record can be used to test saving ratings
+JOIN	[user] usr on usr.Id != @LastUserId --leave the last user so that record can be used to test saving ratings
 
 --reset average movie ratings
 UPDATE Movie
