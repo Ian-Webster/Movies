@@ -12,11 +12,6 @@
             <div class="col-md-4">
                 @using (Html.BeginForm("Create", "Movie", new { area = "Admin" }))
                 {
-                    @*<div class="form-group">
-                        <label asp-for="Id" class="control-label">Id</label>
-                        @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } })
-                        <span asp-validation-for="Title" class="text-danger"></span>
-                    </div>*@
                     @await Html.PartialAsync("_MovieFormFields")
                     @await Html.PartialAsync("_formButtons")
                 }

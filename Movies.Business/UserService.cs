@@ -1,9 +1,11 @@
 ﻿using Movies.Business.Interfaces;
 using Movies.Repository.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Movies.Domain.DTO;
 
 namespace Movies.Business
 {
@@ -33,6 +35,21 @@ namespace Movies.Business
                 var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
                 return Convert.ToBase64String(hashedBytes);
             }
+        }
+
+        public async Task<List<User>> AllUsersAsync()
+        {
+            return await _userRepository.AllUsersAsync();
+        }
+
+        public async Task<User> GetUserAsync(Guid userId)
+        {
+            return await _userRepository.GetUserAsync(userId);
+        }
+
+        public async Task<bool> SaveUserAsync(User user)
+        {
+            return await _userRepository.SaveUserAsync(user);
         }
     }
 }

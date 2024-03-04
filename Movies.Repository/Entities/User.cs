@@ -7,6 +7,10 @@ namespace Movies.Repository.Entities
     {
         public Guid Id { get; set; }
 
+        public String UserName { get; set; }
+
+        public string Password { get; set; }
+
         public IEnumerable<MovieRating> MovieRatings { get; set; }
     }
 }
