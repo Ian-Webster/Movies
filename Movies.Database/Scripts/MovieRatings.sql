@@ -3,10 +3,13 @@
 DECLARE @LastUserId UNIQUEIDENTIFIER = (select top 1 Id from [User])
 
 --insert dummy movie ratings
+
+SELECT RAND(convert(varbinary, newid())) as Value
+
 INSERT INTO MovieRating
 SELECT	mve.Id as MovieId,
 		usr.id as UserId,
-		((10 - 0) * RAND(convert(varbinary, newid())) + 0) as Rating
+		((10 - 0) * (SELECT Value FROM GetRandom) + 0) as Rating
 FROM	Movie mve
 JOIN	[user] usr on usr.Id != @LastUserId --leave the last user so that record can be used to test saving ratings
 
