@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[MovieRating](
-	[MovieId] [int] NOT NULL,
-	[UserId] [int] NOT NULL,
+	[MovieId] UNIQUEIDENTIFIER NOT NULL,
+	[UserId] UNIQUEIDENTIFIER NOT NULL,
 	[Rating] [tinyint] NOT NULL,
 	CONSTRAINT [PK_MovieRating] PRIMARY KEY CLUSTERED ([MovieId] ASC, [UserId] ASC),
 	CONSTRAINT [FK_MoveiRating_Movie] FOREIGN KEY([MovieId]) REFERENCES [dbo].[Movie] ([Id]),

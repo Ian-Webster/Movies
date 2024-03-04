@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Movies.Domain.DTO
 {
@@ -10,7 +11,18 @@ namespace Movies.Domain.DTO
         /// <summary>
         /// Users id
         /// </summary>
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// The users username
+        /// </summary>
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// The users password
+        /// </summary>
+        public string Password { get; set; }
+
         /// <summary>
         /// List of moving ratings submitted by the user
         /// </summary>

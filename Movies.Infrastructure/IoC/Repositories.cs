@@ -6,7 +6,7 @@ namespace Movies.Infrastructure.IoC
 {
     public static class Repositories
     {
-        public static IServiceCollection Configure(this IServiceCollection services)
+        public static IServiceCollection ConfigureRepositories(this IServiceCollection services)
         {
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IRatingRepository, RatingRepository>();

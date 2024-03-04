@@ -15,7 +15,7 @@ namespace Movies.Repository.Tests.Movie
         [TestCase("action", 1)]
         [TestCase("abc", 3)]
         [TestCase("test", 4)]        
-        public void Should_HonourMovieTitleFilter(string movieTitle, int expectedMovieCount)
+        public void Should_HonorMovieTitleFilter(string movieTitle, int expectedMovieCount)
         {
             //arrange/act
             var asyncResult = GetRepository().SearchMoviesAsync(new MovieSearchCriteria { Title = movieTitle });
@@ -31,7 +31,7 @@ namespace Movies.Repository.Tests.Movie
         [TestCase(2001, 1)]
         [TestCase(2000, 2)]
         [TestCase(1999, 4)]
-        public void Should_HonourYearOfReleaseFilter(short yearOfrelease, int expectedMovieCount)
+        public void Should_HonorYearOfReleaseFilter(short yearOfrelease, int expectedMovieCount)
         {
             //arrange/act
             var aysncResult = GetRepository().SearchMoviesAsync(new MovieSearchCriteria { YearOfRelease = yearOfrelease });

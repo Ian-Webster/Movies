@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using Movies.API.Controllers;
 using Movies.Business.Interfaces;
 using NUnit.Framework;
@@ -18,7 +19,7 @@ namespace Movies.API.Tests.TopMovies
             MockMovieService = new Mock<IMovieService>();
             MockUserService = new Mock<IUserService>();
 
-            MockUserService.Setup(s => s.UserExistsAsync(It.IsAny<int>())).Returns(Task.FromResult(true));
+            MockUserService.Setup(s => s.UserExistsAsync(It.IsAny<Guid>())).Returns(Task.FromResult(true));
 
         }
 

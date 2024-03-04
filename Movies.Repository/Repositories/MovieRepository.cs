@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Movies.Domain.DTO;
 using Movies.Domain.Enums;
 using Movies.Repository.Interfaces;
@@ -13,13 +14,9 @@ namespace Movies.Repository
     {
         public MovieRepository(Context context) : base(context) { }
 
-        public async Task<bool> MovieExistsAsync(int movieId)
+        public async Task<bool> MovieExistsAsync(Guid movieId)
         {
-            Task<bool> task = Task.Run(() => _context.MovieDbSet.Any(m => m.Id == movieId));
-
-            var result = await task;
-
-            return result;
+            return await _context.MovieDbSet.AnyAsync(m => m.Id == movieId);
         }
 
         public async Task<List<Movie>> SearchMoviesAsync(MovieSearchCriteria movieSearchCritera)
@@ -72,8 +69,8 @@ namespace Movies.Repository
                     })
                 .ToListAsync();
         }
-
-        public async Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, int userId)
+        
+        public async Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, Guid userId)
         {
             var movieRatings = _context.MovieRatingDbSet
                 .Where(mr => mr.UserId == userId)
@@ -95,10 +92,13 @@ namespace Movies.Repository
 
         public async Task<bool> SaveMovieAsync(Movie movie)
         {
-            var movieDao = _context.MovieDbSet.Find(movie.Id);
+            var movieDao = movie.Id != Guid.Empty ? await _context.MovieDbSet.FindAsync(movie.Id): null;
             if (movieDao == null)
             {
-                movieDao = new Repo.Movie();
+                movieDao = new Repo.Movie
+                {
+                    Id = movie.Id
+                };
                 _context.Add(movieDao);
             }
             movieDao.GenreId = (short)movie.Genre;
@@ -109,5 +109,37 @@ namespace Movies.Repository
             return await _context.SaveChangesAsync() > 0;
         }
 
+        public async Task<Movie> GetMovieAsync(Guid movieId)
+        {
+            var result = _context.MovieDbSet
+                .Where(m => m.Id == movieId)
+                .Select(m => new Movie
+                {
+                    AverageRating = m.AverageRating,
+                    Genre = (Genres)m.GenreId,
+                    Id = m.Id,
+                    RunningTime = m.RunningTime,
+                    Title = m.Title,
+                    YearOfRelease = m.YearOfRelease
+                });
+
+            return await result.FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Movie>> GetMoviesAsync()
+        {
+            return await _context.MovieDbSet
+                .OrderBy(m => m.Title)
+                .Select(m => new Movie
+                {
+                    AverageRating = m.AverageRating,
+                    Genre = (Genres)m.GenreId,
+                    Id = m.Id,
+                    RunningTime = m.RunningTime,
+                    Title = m.Title,
+                    YearOfRelease = m.YearOfRelease
+                })
+                .ToListAsync();
+        }
     }
 }

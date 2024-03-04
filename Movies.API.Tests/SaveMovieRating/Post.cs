@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Movies.Domain.DTO;
 using Movies.Domain.Enums.Validation;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Movies.API.Tests.SaveMovieRating
@@ -51,7 +49,7 @@ namespace Movies.API.Tests.SaveMovieRating
         public async Task Should_SaveRatingAsync()
         {
             //arrange
-            var rating = new MovieRating { MovieId = 1, Rating = 2, UserId = 3 };
+            var rating = new MovieRating { MovieId = Guid.NewGuid(), Rating = 2, UserId = Guid.NewGuid() };
 
             MockRatingService.Setup(s => s.ValidateMovieRatingAsync(rating)).Returns(Task.FromResult(MovieRatingSaveValidationResults.OK));
 
@@ -67,7 +65,7 @@ namespace Movies.API.Tests.SaveMovieRating
         public void ShouldReturn_ExpectedActionResultAfter_Saving(bool saved)
         {
             //arrange
-            var rating = new MovieRating { MovieId = 1, Rating = 2, UserId = 3 };
+            var rating = new MovieRating { MovieId = Guid.NewGuid(), Rating = 2, UserId = Guid.NewGuid() };
 
             MockRatingService.Setup(s => s.ValidateMovieRatingAsync(rating)).Returns(Task.FromResult(MovieRatingSaveValidationResults.OK));
             MockRatingService.Setup(s => s.SaveRatingAsync(rating)).Returns(Task.FromResult(saved));

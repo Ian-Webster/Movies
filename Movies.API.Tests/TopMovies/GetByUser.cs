@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using dto = Movies.Domain.DTO;
 using NUnit.Framework;
@@ -11,28 +12,27 @@ namespace Movies.API.Tests.TopMovies
     public class GetByUser: TopMoviesBase
     {
 
-        [TestCase(0)]
-        [TestCase(-1)]
-        public void Should_ReturnBadRequest_WhenUserIdInvalid(int userId)
+        [Test]
+        public void Should_ReturnBadRequest_WhenUserIdInvalid()
         {
-            //arrange/act
-            var asyncResult = GetController().Get(userId);
+            // Arrange / Act
+            var asyncResult = GetController().Get(Guid.Empty);
 
-            //assert
+            // Assert
             var result = asyncResult.Result;
             Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
         }
 
         [Test]
-        public void Should_ReturnRequest_WhenUserDoesNotExist()
+        public void Should_ReturnBadRequestObject_WhenUserDoesNotExist()
         {
-            //arrange
-            MockUserService.Setup(s => s.UserExistsAsync(It.IsAny<int>())).Returns(Task.FromResult(false));
+            // Arrange
+            MockUserService.Setup(s => s.UserExistsAsync(It.IsAny<Guid>())).Returns(Task.FromResult(false));
 
-            //act
-            var asyncResult = GetController().Get(1);
+            // Act
+            var asyncResult = GetController().Get(Guid.NewGuid());
 
-            //assert
+            // Assert
             var result = asyncResult.Result;
             Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
         }
@@ -40,46 +40,44 @@ namespace Movies.API.Tests.TopMovies
         [Test]
         public async Task Should_CallCorrectServiceMethodAsync()
         {
-            //arrange/act
-            await GetController().Get(1);
+            // Arrange / Act
+            await GetController().Get(Guid.NewGuid());
 
-            //assert
-            MockMovieService.Verify(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<int>()), Times.Once);
+            // Assert
+            MockMovieService.Verify(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<Guid>()), Times.Once);
         }
 
         [TestCase(true)]
         [TestCase(false)]
-        public void Should_ReturnNotFound_IfMoviesAreNullOrEmpty(bool isNull)
+        public async Task Should_ReturnNotFound_IfMoviesAreNullOrEmpty(bool isNull)
         {
-            //arrange
+            // Arrange
             if (isNull)
             {
-                MockMovieService.Setup(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<int>())).Returns(Task.FromResult(null as List<dto.Movie>));
+                MockMovieService.Setup(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<Guid>())).Returns(Task.FromResult(null as List<dto.Movie>));
             }
             else
             {
-                MockMovieService.Setup(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<int>())).Returns(Task.FromResult(new List<dto.Movie>()));
+                MockMovieService.Setup(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<Guid>())).Returns(Task.FromResult(new List<dto.Movie>()));
             }
 
-            //act
-            var asyncResult = GetController().Get(1);
+            // Act
+            var result = await GetController().Get(Guid.NewGuid());
 
-            //assert
-            var result = asyncResult.Result;
+            // Assert
             Assert.That(result, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
-        public void Should_ReturnJsonResult()
+        public async Task Should_ReturnJsonResult()
         {
-            //arrange
-            MockMovieService.Setup(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<int>())).Returns(Task.FromResult(new List<dto.Movie> { new dto.Movie() }));
+            // Arrange
+            MockMovieService.Setup(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<Guid>())).Returns(Task.FromResult(new List<dto.Movie> { new dto.Movie() }));
 
-            //act
-            var asyncResult = GetController().Get(1);
+            // Act
+            var result = await GetController().Get(Guid.NewGuid());
 
-            //assert
-            var result = asyncResult.Result;
+            // Assert
             Assert.That(result, Is.InstanceOf<JsonResult>());
         }
     }

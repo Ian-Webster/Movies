@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -55,11 +56,11 @@ namespace Movies.API.Controllers
         /// <returns></returns>
         [HttpGet("userId")]
         [ProducesResponseType(200, Type = typeof(List<Movie>))]
-        public async Task<IActionResult> Get(int userId)
+        public async Task<IActionResult> Get(Guid userId)
         {
-            if (userId <= 0)
+            if (userId == Guid.Empty)
             {
-                return BadRequest("userId is zero or negative");
+                return BadRequest("userId is empty");
             }
 
             if (! await _userService.UserExistsAsync(userId))

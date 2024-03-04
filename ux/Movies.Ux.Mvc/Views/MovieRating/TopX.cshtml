@@ -1,0 +1,13 @@
+﻿@model List<Movies.Domain.DTO.Movie>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card" style="margin-top:25px">
+    <div class="card-body">
+        <h2 class="card-title">Top @(ViewBag.MovieCount) Movies</h2>
+        @await Html.PartialAsync("_TopXMovieList")
+    </div>
+</div>

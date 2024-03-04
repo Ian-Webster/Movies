@@ -1,6 +1,6 @@
 ﻿CREATE FUNCTION [dbo].[fnCalculateMovieAverageRating]
 (
-	@MovieId int
+	@MovieId UNIQUEIDENTIFIER
 )
 RETURNS decimal(4,2)
 AS

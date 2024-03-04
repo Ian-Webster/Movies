@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Movies.Domain.DTO
 {
@@ -11,12 +12,12 @@ namespace Movies.Domain.DTO
         /// Id of the user
         /// </summary>
         [Required]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         /// <summary>
         /// Id of the movie
         /// </summary>
         [Required]
-        public int MovieId { get; set; }
+        public Guid MovieId { get; set; }
         /// <summary>
         /// User rating for the movie, must be zero or greater
         /// </summary>

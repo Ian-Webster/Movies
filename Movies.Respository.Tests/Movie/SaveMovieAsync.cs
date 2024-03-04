@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using dto = Movies.Domain.DTO;
 using repo = Movies.Repository.Entities;
 using Movies.Domain.Enums;
@@ -13,7 +14,7 @@ namespace Movies.Repository.Tests.Movie
         public void Should_AddNewMovies()
         {
             //arrange
-            var newMovie = new dto.Movie { Genre = Genres.Action, RunningTime = 100, Title = "test movie", YearOfRelease = 1999 };
+            var newMovie = new dto.Movie { Id = Guid.NewGuid(), Genre = Genres.Action, RunningTime = 100, Title = "test movie", YearOfRelease = 1999 };
 
             var existingMovieCount = 0;
 
@@ -27,18 +28,18 @@ namespace Movies.Repository.Tests.Movie
 
             //assert
             var newMovieCount = 0;
-            repo.Movie lastMovie = null;
+            repo.Movie insertedMovie = null;
             using (var context = GetContext())
             {
                 newMovieCount = context.MovieDbSet.Count();
-                lastMovie = context.MovieDbSet.OrderBy(m => m.Id).Last();
+                insertedMovie = context.MovieDbSet.Find(newMovie.Id);
             }
 
             Assert.That(existingMovieCount + 1, Is.EqualTo(newMovieCount));
-            Assert.That(newMovie.Genre, Is.EqualTo((Genres)lastMovie.GenreId));
-            Assert.That(newMovie.RunningTime, Is.EqualTo(lastMovie.RunningTime));
-            Assert.That(newMovie.Title, Is.EqualTo(lastMovie.Title));
-            Assert.That(newMovie.YearOfRelease, Is.EqualTo(lastMovie.YearOfRelease));
+            Assert.That(newMovie.Genre, Is.EqualTo((Genres)insertedMovie.GenreId));
+            Assert.That(newMovie.RunningTime, Is.EqualTo(insertedMovie.RunningTime));
+            Assert.That(newMovie.Title, Is.EqualTo(insertedMovie.Title));
+            Assert.That(newMovie.YearOfRelease, Is.EqualTo(insertedMovie.YearOfRelease));
         }
 
         [Test]

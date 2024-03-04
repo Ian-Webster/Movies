@@ -1,0 +1,24 @@
+﻿@model Movies.Domain.DTO.Movie
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+@Html.HiddenFor(m => m.Id)
+<div class="form-group">
+    <label asp-for="Title" class="control-label">Title</label>
+    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+    <span asp-validation-for="Title" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="YearOfRelease" class="control-label">Year of Release</label>
+    @Html.EditorFor(model => model.YearOfRelease, new { htmlAttributes = new { @class = "form-control" } })
+    <span asp-validation-for="YearOfRelease" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Genre" class="control-label">Genre</label>
+    @Html.DropDownListFor(m => m.Genre, (SelectList)ViewBag.GenreSelectList, new { @class = "form-control" })
+    <span asp-validation-for="Genre" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="RunningTime" class="control-label">Running Time (minutes)</label>
+    @Html.EditorFor(model => model.RunningTime, new { htmlAttributes = new { @class = "form-control" } })
+    <span asp-validation-for="RunningTime" class="text-danger"></span>
+</div>

@@ -1,6 +1,8 @@
-﻿using Movies.Domain.DTO;
+﻿using System;
+using Movies.Domain.DTO;
 using NUnit.Framework;
 using System.Linq;
+using System.Threading.Tasks;
 using Repo = Movies.Repository.Entities;
 
 namespace Movies.Repository.Tests.Rating
@@ -10,13 +12,13 @@ namespace Movies.Repository.Tests.Rating
     {
 
         [Test]
-        public void Should_AddNewRatingToDatabase()
+        public async Task Should_AddNewRatingToDatabase()
         {
-            //arrange
-            var rating = new MovieRating { MovieId = 1, Rating = 2, UserId = 3 };
+            // Arrange
+            var rating = new MovieRating { MovieId = Guid.NewGuid(), Rating = 2, UserId = Guid.NewGuid() };
 
-            //act
-            GetRepository().SaveRatingAsync(rating);
+            // Act
+            await GetRepository().SaveRatingAsync(rating);
 
             var ratingCount = 0;
             var firstRating = new Repo.MovieRating();
@@ -27,7 +29,7 @@ namespace Movies.Repository.Tests.Rating
                 firstRating = context.MovieRatingDbSet.First();
             }
 
-            //assert
+            // Assert
             Assert.That(1, Is.EqualTo(ratingCount));
 
             Assert.That(firstRating, Is.Not.Null);
@@ -37,16 +39,17 @@ namespace Movies.Repository.Tests.Rating
         }
 
         [Test]
-        public void Should_UpdateExistingRatingInDatabase()
+        public async Task Should_UpdateExistingRatingInDatabase()
         {
-            //arrange
-            var existingRating = new Repo.MovieRating { MovieId = 1, UserId = 2, Rating = 3 };
-            var newRating = new MovieRating { MovieId = 1, UserId = 2, Rating = 4 };
+            // Arrange
+            var userId = Guid.NewGuid();
+            var existingRating = new Repo.MovieRating { MovieId = Guid.NewGuid(), UserId = userId, Rating = 3 };
+            var newRating = new MovieRating { MovieId = existingRating.MovieId, UserId = userId, Rating = 4 };
 
             InsertRating(existingRating);
 
-            //act
-            GetRepository().SaveRatingAsync(newRating);
+            // Act
+            await GetRepository().SaveRatingAsync(newRating);
 
             var ratingCount = 0;
             var firstRating = new Repo.MovieRating();
@@ -57,7 +60,7 @@ namespace Movies.Repository.Tests.Rating
                 firstRating = context.MovieRatingDbSet.First();
             }
 
-            //assert
+            // Assert
             Assert.That(1, Is.EqualTo(ratingCount));
 
             Assert.That(firstRating, Is.Not.Null);

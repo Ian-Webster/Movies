@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Movies.Repository.Tests.DataGeneration;
 using Repo = Movies.Repository.Entities;
 
 namespace Movies.Repository.Tests.Movie
@@ -31,11 +32,20 @@ namespace Movies.Repository.Tests.Movie
             {
                 var movies = context.MovieDbSet.ToList();
 
-                movies.ForEach(m =>
+                foreach (var movie in movies)
                 {
-                    m.AverageRating = m.Id;
-                });
+                    movie.AverageRating = movies.IndexOf(movie);
+                }
 
+                context.SaveChanges();
+            }
+        }
+
+        protected void InsertMovies(List<Repo.Movie> movies)
+        {
+            using (var context = GetContext())
+            {
+                context.AddRange(movies);
                 context.SaveChanges();
             }
         }
@@ -72,6 +82,31 @@ namespace Movies.Repository.Tests.Movie
             filter = new MovieSearchCriteria { Title = "test", Genres = new List<Genres> { Genres.Horror } };
             result = new TestCaseData(filter, 1);
             yield return result;
+        }
+
+        protected static IEnumerable GetMovieAsyncTestCaseData()
+        {
+            var movies = MovieDataGeneration.GetRandomMovies(5);
+            yield return new TestCaseData(
+                movies.First(),
+                movies).SetName($"{movies.Count} movies, id {movies.First().Id} expected");
+            yield return new TestCaseData(
+                movies.Last(),
+                movies).SetName($"{movies.Count} movies, id {movies.Last().Id} expected");
+            yield return new TestCaseData(
+                movies.Skip(2).First(),
+                movies).SetName($"{movies.Count} movies, id {movies.Skip(2).First().Id} expected");
+
+            movies = MovieDataGeneration.GetRandomMovies(10);
+            yield return new TestCaseData(
+                movies.First(),
+                movies).SetName($"{movies.Count} movies, id {movies.First().Id} expected");
+            yield return new TestCaseData(
+                movies.Last(),
+                movies).SetName($"{movies.Count} movies, id {movies.Last().Id} expected");
+            yield return new TestCaseData(
+                movies.Skip(5).First(),
+                movies).SetName($"{movies.Count} movies, id {movies.Skip(5).First().Id} expected");
         }
 
         private void InsertMovieTestData()
@@ -116,7 +151,7 @@ namespace Movies.Repository.Tests.Movie
 
                 movies.ForEach(m =>
                 {
-                    ratings.Add(new Repo.MovieRating { MovieId = m.Id, Rating = (byte)m.Id });
+                    ratings.Add(new Repo.MovieRating { MovieId = m.Id, Rating = (byte)movies.IndexOf(m)});
                 });
                 user.MovieRatings = ratings;
 
@@ -133,8 +168,6 @@ namespace Movies.Repository.Tests.Movie
                 context.SaveChanges();
             }
         }
-
-        
 
     }
 }

@@ -1,0 +1,22 @@
+﻿@model List<Movies.Domain.DTO.Movie>
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(Model.IndexOf(item) + 1)
+                <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.AverageRatingForDisplay)
+                </td>
+                <td>
+                        @Html.ActionLink("View", "Details", controllerName: "Movie", new { id = item.Id }, new { @class = "btn btn-primary" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

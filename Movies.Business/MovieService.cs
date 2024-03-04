@@ -20,11 +20,11 @@ namespace Movies.Business
             _userService = userService;
         }
 
-        public async Task<bool> MovieExistsAsync(int movieId)
+        public async Task<bool> MovieExistsAsync(Guid movieId)
         {
-            if (movieId <= 0)
+            if (movieId == Guid.Empty)
             {
-                throw new ArgumentException("moveId must be greater than zero", "movieId");
+                throw new ArgumentException("moveId cannot be empty", nameof(movieId));
             }
 
             return await _movieRepository.MovieExistsAsync(movieId);
@@ -35,12 +35,12 @@ namespace Movies.Business
             var validationResult = ValidateSearchCriteria(movieSearchCriteria);
             if (validationResult == MovieSearchValidationResults.NoCriteria)
             {
-                throw new ArgumentException("movieSearchCriteria must not be null", "movieSearchCriteria");
+                throw new ArgumentException("movieSearchCriteria must not be null", nameof(movieSearchCriteria));
             }
 
             if (validationResult == MovieSearchValidationResults.InvalidCriteria)
             {
-                throw new ArgumentException("movieSearchCriteria must have at least one search criteria", "movieSearchCriteria");
+                throw new ArgumentException("movieSearchCriteria must have at least one search criteria", nameof(movieSearchCriteria));
             }
 
             return await _movieRepository.SearchMoviesAsync(movieSearchCriteria);
@@ -50,27 +50,27 @@ namespace Movies.Business
         {
             if (movieCount == 0)
             {
-                throw new ArgumentException("movieCount must be greater than zero", "movieCount");
+                throw new ArgumentException("movieCount must be greater than zero", nameof(movieCount));
             }
 
             return await _movieRepository.TopMoviesAsync(movieCount);
         }
 
-        public async Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, int userId)
+        public async Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, Guid userId)
         {
             if (movieCount == 0)
             {
-                throw new ArgumentException("movieCount must be greater than zero", "movieCount");
+                throw new ArgumentException("movieCount must be greater than zero", nameof(movieCount));
             }
 
-            if (userId <= 0)
+            if (userId == Guid.Empty)
             {
-                throw new ArgumentException("userId must be greater than zero", "userId");
+                throw new ArgumentException("userId cannot be empty", nameof(userId));
             }
 
             if (! await _userService.UserExistsAsync(userId))
             {
-                throw new ArgumentException($"User not found for userId {userId}", "userId");
+                throw new ArgumentException($"User not found for userId {userId}", nameof(userId));
             }
 
             return await _movieRepository.TopMoviesByUserAsync(movieCount, userId);
@@ -96,6 +96,16 @@ namespace Movies.Business
         public async Task<bool> SaveMovieAsync(Movie movie)
         {
             return await _movieRepository.SaveMovieAsync(movie);
+        }
+
+        public async Task<Movie> GetMovieAsync(Guid movieId)
+        {
+            return await _movieRepository.GetMovieAsync(movieId);
+        }
+
+        public async Task<List<Movie>> GetMoviesAsync()
+        {
+            return await _movieRepository.GetMoviesAsync();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Movies.Repository.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<MovieRating> builder)
         {
-            builder.ToTable("MovieRating");
+            builder.ToTable("MovieRating", b => b.HasTrigger("trgMovieRating"));
 
             builder.HasKey(pk => new { pk.MovieId, pk.UserId });
 

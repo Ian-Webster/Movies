@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
 
@@ -8,25 +9,26 @@ namespace Movies.Business.Tests.UserService
     public class UserExists: UserServiceBase
     {
 
-        [TestCase(-1)]
-        [TestCase(0)]
-        public void WhenCalling_UsersExists_WithInvalidUserId_ExpectException(int userId)
+        [Test]
+        public void Should_ThrowException_WhenUserIdIsInvalid()
         {
-            //arrange/act/assert
-            Assert.That(() => GetService().UserExistsAsync(userId), Throws.ArgumentException);
+            // Arrange / Act / Assert
+            Assert.That(() => GetService().UserExistsAsync(Guid.Empty), Throws.ArgumentException);
         }
 
-        [TestCase(1)]
-        [TestCase(2)]
-        public void WhenCalling_UsersExists_WithValidUserId_RepositoryMethodCalled(int userId)
+        [TestCase("3763B7C5-992F-4691-8C64-88A70EC11550")]
+        [TestCase("B216DDE8-EC63-41C8-B5E1-91430F4AF29D")]
+        [TestCase("9BB37389-6608-4699-8592-86F269AE15B9")]
+        public void Should_CallUserRepositoryUserExists_WhenUserIdIsValid(string userIdString)
         {
-            //arrange
+            // Arrange
+            var userId = Guid.Parse(userIdString);
             MockUserRepository.Setup(s => s.UserExistsAsync(userId)).Returns(Task.FromResult(true));
 
-            //act
+            // Act
             var result = GetService().UserExistsAsync(userId);
 
-            //assert
+            // Assert
             MockUserRepository.Verify(s => s.UserExistsAsync(userId), Times.Once);
         }
 
