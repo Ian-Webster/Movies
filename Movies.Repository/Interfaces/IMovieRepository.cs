@@ -1,4 +1,5 @@
-﻿using Movies.Domain.DTO;
+﻿using System;
+using Movies.Domain.DTO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace Movies.Repository.Interfaces
         /// </summary>
         /// <param name="movieId"></param>
         /// <returns></returns>
-        Task<bool> MovieExistsAsync(int movieId);
+        Task<bool> MovieExistsAsync(Guid movieId);
 
         /// <summary>
         /// Searches movies using the given criteria
@@ -32,7 +33,7 @@ namespace Movies.Repository.Interfaces
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, int userId);
+        Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, Guid userId);
 
         /// <summary>
         /// Saves the movie, inserts if the movie doesn't exist or updates if the movie does exist
@@ -41,7 +42,7 @@ namespace Movies.Repository.Interfaces
         /// <returns></returns>
         Task<bool> SaveMovieAsync(Movie movie);
 
-        Task<Movie> GetMovieAsync(int movieId);
+        Task<Movie> GetMovieAsync(Guid movieId);
 
         Task<List<Movie>> GetMoviesAsync();
     }

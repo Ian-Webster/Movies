@@ -1,9 +1,11 @@
-﻿namespace Movies.Repository.Entities
+﻿using System;
+
+namespace Movies.Repository.Entities
 {
     public class MovieRating
     {
-        public int UserId { get; set; }
-        public int MovieId { get; set; }
+        public Guid UserId { get; set; }
+        public Guid MovieId { get; set; }
         public byte Rating { get; set; }
 
         public Movie Movie { get; set; }

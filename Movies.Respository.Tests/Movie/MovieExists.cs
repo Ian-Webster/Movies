@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace Movies.Repository.Tests.Movie
         public async Task Should_ReturnTrue_WhenMoviesExists(bool moviesExists)
         {
             //arrange
-            var movieId = 0;
+            Guid movieId = Guid.Empty;
             using (var context = GetContext())
             {
                 if (moviesExists)
@@ -21,7 +22,7 @@ namespace Movies.Repository.Tests.Movie
                 }
                 else
                 {
-                    movieId = context.MovieDbSet.Max(m => m.Id) + 1;
+                    movieId = Guid.NewGuid();
                 }
             }
 

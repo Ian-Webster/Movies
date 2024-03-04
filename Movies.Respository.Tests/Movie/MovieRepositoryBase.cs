@@ -32,10 +32,10 @@ namespace Movies.Repository.Tests.Movie
             {
                 var movies = context.MovieDbSet.ToList();
 
-                movies.ForEach(m =>
+                foreach (var movie in movies)
                 {
-                    m.AverageRating = m.Id;
-                });
+                    movie.AverageRating = movies.IndexOf(movie);
+                }
 
                 context.SaveChanges();
             }
@@ -151,7 +151,7 @@ namespace Movies.Repository.Tests.Movie
 
                 movies.ForEach(m =>
                 {
-                    ratings.Add(new Repo.MovieRating { MovieId = m.Id, Rating = (byte)m.Id });
+                    ratings.Add(new Repo.MovieRating { MovieId = m.Id, Rating = (byte)movies.IndexOf(m)});
                 });
                 user.MovieRatings = ratings;
 

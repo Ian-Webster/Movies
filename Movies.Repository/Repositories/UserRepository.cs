@@ -1,4 +1,5 @@
-﻿using Movies.Repository.Interfaces;
+﻿using System;
+using Movies.Repository.Interfaces;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace Movies.Repository
     {
         public UserRepository(Context context) : base(context) { }
 
-        public async Task<bool> UserExistsAsync(int userId)
+        public async Task<bool> UserExistsAsync(Guid userId)
         {
             return await Task.Run(() => _context.UserDbSet.Any(u => u.Id == userId));
         }

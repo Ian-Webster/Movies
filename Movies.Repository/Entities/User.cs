@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Movies.Repository.Entities
 {
     public class User
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public IEnumerable<MovieRating> MovieRatings { get; set; }
     }

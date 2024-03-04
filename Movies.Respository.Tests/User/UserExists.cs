@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using System.Linq;
 
 namespace Movies.Repository.Tests.User
@@ -12,7 +13,7 @@ namespace Movies.Repository.Tests.User
         public void Should_ReturnTrueWhenUserExists(bool userExists)
         {
             //arrange
-            var userId = 0;
+            Guid userId = Guid.Empty;
 
             using (var context = GetContext())
             {
@@ -22,7 +23,7 @@ namespace Movies.Repository.Tests.User
                 }
                 else
                 {
-                    userId = context.UserDbSet.Max(m => m.Id) + 1;
+                    userId = Guid.NewGuid();
                 }
             }
 

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Movies.Repository.Interfaces
 {
@@ -9,6 +10,6 @@ namespace Movies.Repository.Interfaces
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<bool> UserExistsAsync(int userId);
+        Task<bool> UserExistsAsync(Guid userId);
     }
 }

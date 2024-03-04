@@ -1,4 +1,5 @@
-﻿using Movies.Domain.DTO;
+﻿using System;
+using Movies.Domain.DTO;
 using Movies.Domain.Enums.Validation;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -34,14 +35,14 @@ namespace Movies.Business.Interfaces
         /// <param name="movieCount"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, int userId);
+        Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, Guid userId);
 
         /// <summary>
         /// Checks if the given movie exists
         /// </summary>
         /// <param name="movieId"></param>
         /// <returns></returns>
-        Task<bool> MovieExistsAsync(int movieId);
+        Task<bool> MovieExistsAsync(Guid movieId);
 
         /// <summary>
         /// Saves the given movie, if existing movie updates, if new inserts, returns true if save was successful
@@ -50,7 +51,7 @@ namespace Movies.Business.Interfaces
         /// <returns></returns>
         Task<bool> SaveMovieAsync(Movie movie);
 
-        Task<Movie> GetMovieAsync(int movieId);
+        Task<Movie> GetMovieAsync(Guid movieId);
 
         Task<List<Movie>> GetMoviesAsync();
     }

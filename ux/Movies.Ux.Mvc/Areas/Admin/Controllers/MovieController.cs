@@ -24,7 +24,7 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
         }
 
         // GET: MovieController/Details/5
-        public async Task<ActionResult<Movie>> Details(int id)
+        public async Task<ActionResult<Movie>> Details(Guid id)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
         }
 
         // GET: MovieController/Edit/5
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(Guid id)
         {
             var movie = await _movieService.GetMovieAsync(id);
             SetGenreSelectList();

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Movies.Business.Interfaces
 {
@@ -9,6 +10,13 @@ namespace Movies.Business.Interfaces
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<bool> UserExistsAsync(int userId);
+        Task<bool> UserExistsAsync(Guid userId);
+
+        /// <summary>
+        /// Hashes the given password
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        string HashPassword(string password);
     }
 }

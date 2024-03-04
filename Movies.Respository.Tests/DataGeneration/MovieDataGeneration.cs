@@ -13,7 +13,7 @@ public static class MovieDataGeneration
     public static List<repo.Movie> GetRandomMovies(int count)
     {
         return new Faker<repo.Movie>()
-            .RuleFor(m => m.Id, f => f.IndexFaker)
+            .RuleFor(m => m.Id, f => Guid.NewGuid())
             .RuleFor(m => m.Title, f => f.Lorem.Word())
             .RuleFor(m => m.YearOfRelease, f => f.Random.Short(1900, 2022))
             .RuleFor(m => m.RunningTime, f => f.Random.Byte(60, 180))

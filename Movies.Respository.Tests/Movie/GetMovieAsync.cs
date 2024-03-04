@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Movies.Domain.Enums;
 using Movies.Repository.Tests.DataGeneration;
@@ -21,7 +22,7 @@ public class GetMovieAsync : MovieRepositoryBase
         InsertMovies(movies);
 
         // Act
-        var result = await GetRepository().GetMovieAsync(100);
+        var result = await GetRepository().GetMovieAsync(Guid.NewGuid());
 
         // Assert
         Assert.That(result, Is.Null);

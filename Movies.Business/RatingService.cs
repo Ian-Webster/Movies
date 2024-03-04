@@ -48,7 +48,7 @@ namespace Movies.Business
                 return MovieRatingSaveValidationResults.NullRating;
             }
 
-            if (movieRating.MovieId <= 0)
+            if (movieRating.MovieId == Guid.Empty)
             {
                 return MovieRatingSaveValidationResults.InvalidMovieId;
             }
@@ -58,7 +58,7 @@ namespace Movies.Business
                 return MovieRatingSaveValidationResults.MovieNotfound;
             }
 
-            if (movieRating.UserId <= 0)
+            if (movieRating.UserId == Guid.Empty)
             {
                 return MovieRatingSaveValidationResults.InvalidUserId;
             }

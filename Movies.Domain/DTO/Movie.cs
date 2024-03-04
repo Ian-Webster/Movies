@@ -11,7 +11,7 @@ namespace Movies.Domain.DTO
         /// <summary>
         /// Id of movie
         /// </summary>
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Movies title
         /// </summary>
