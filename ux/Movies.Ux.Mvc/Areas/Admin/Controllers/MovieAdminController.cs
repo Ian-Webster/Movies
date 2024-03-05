@@ -8,23 +8,23 @@ using Movies.Ux.Mvc.Controllers;
 namespace Movies.Ux.Mvc.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class MovieController : BaseController
+    public class MovieAdminController : BaseController
     {
         private readonly IMovieService _movieService;
 
-        public MovieController(IMovieService movieService)
+        public MovieAdminController(IMovieService movieService)
         {
             _movieService = movieService;
         }
 
-        // GET: MovieController
+        // GET: MovieAdminController
         public async Task<ActionResult> Index()
         {
             var movies = await _movieService.GetMovies(GetCancellationToken());
             return View(movies);
         }
 
-        // GET: MovieController/Details/5
+        // GET: MovieAdminController/Details/5
         public async Task<ActionResult<Movie>> Details(Guid id)
         {
             try
@@ -40,14 +40,14 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
             }
         }
 
-        // GET: MovieController/Create
+        // GET: MovieAdminController/Create
         public ActionResult Create()
         {
             SetGenreSelectList();
             return View(new Movie{ Id = Guid.NewGuid()});
         }
 
-        // POST: MovieController/Create
+        // POST: MovieAdminController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Movie movie)
@@ -63,7 +63,7 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
             }
         }
 
-        // GET: MovieController/Edit/5
+        // GET: MovieAdminController/Edit/5
         public async Task<ActionResult> Edit(Guid id)
         {
             var movie = await _movieService.GetMovie(id, GetCancellationToken());
@@ -71,7 +71,7 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
             return movie != null ? View(movie) : NotFound();
         }
 
-        // POST: MovieController/Edit/5
+        // POST: MovieAdminController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Movie movie)
