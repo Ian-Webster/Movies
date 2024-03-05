@@ -14,6 +14,7 @@
 }
 else
 {
+    @Html.AntiForgeryToken()
     <div class="card" style="margin-top:25px">
         <div class="card-body">
             <h2 class="card-title">@Model.Title</h2>
@@ -73,6 +74,8 @@ else
 
         <script>
             $(document).ready(function () {
+                var token = $('[name=__RequestVerificationToken]').val();
+
                 $('.average-rating').raty({
                     'path': '@Url.Content("~/images/raty")',
                     'number': 10,
@@ -80,7 +83,12 @@ else
                         $.ajax({
                             type: "POST",
                             url: '@Url.Action("Rate", "MovieRating")',
-                            data: { movieId: '@Model.Id', userId: '6d256119-f227-4cbf-895c-c5a00a499c82', rating: score }, //TODO remove hardcoded userid
+                            data: { 
+                                movieId: '@Model.Id',
+                                userId: '6d256119-f227-4cbf-895c-c5a00a499c82',  // TODO: remove hardcoded user id
+                                rating: score,
+                                __RequestVerificationToken: token,
+                            }, 
                             statusCode: {
                                 200: function() {
                                     alert('Rating saved');

@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Movies.Repository.Tests.User
 {
@@ -10,7 +11,7 @@ namespace Movies.Repository.Tests.User
 
         [TestCase(true)]
         [TestCase(false)]
-        public void Should_ReturnTrueWhenUserExists(bool userExists)
+        public async Task Should_ReturnTrueWhenUserExists(bool userExists)
         {
             //arrange
             Guid userId = Guid.Empty;
@@ -28,10 +29,9 @@ namespace Movies.Repository.Tests.User
             }
 
             //act
-            var asyncResult = GetRepository().UserExistsAsync(userId);
+            var result = await GetRepository().UserExists(userId, GetCancellationToken());
 
             //assert
-            var result = asyncResult.Result;
             if(userExists)
             {
                 Assert.That(result, Is.True);

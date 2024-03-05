@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Moq;
 using Movies.Domain.DTO;
 using NUnit.Framework;
 
@@ -9,26 +11,26 @@ namespace Movies.Business.Tests.MovieService
     {
 
         [Test]
-        public void WhenCalling_SearchMovies_WithNullCriteria_ExpectException()
+        public async Task WhenCalling_SearchMovies_WithNullCriteria_ExpectException()
         {
-            //arrange/act/assert
-            Assert.That(() => GetService().SearchMoviesAsync(null), Throws.ArgumentException);
+            // Arrange / Act / Assert
+            await Assert.ThatAsync(() => GetService().SearchMovies(null, GetCancellationToken()), Throws.ArgumentException);
         }
 
         [Test]
-        public void WhenCalling_SearchMovies_WithInvalidCriteria_ExpectException()
+        public async Task WhenCalling_SearchMovies_WithInvalidCriteria_ExpectException()
         {
-            //arrange/act/assert
-            Assert.That(() => GetService().SearchMoviesAsync(new MovieSearchCriteria()), Throws.ArgumentException);
+            // Arrange / Act / Assert
+            await Assert.ThatAsync(() => GetService().SearchMovies(new MovieSearchCriteria(), GetCancellationToken()), Throws.ArgumentException);
         }
 
         [TestCase("test", 0, false)]
         [TestCase("", 1999, false)]
         [TestCase("", 0, true)]
         [TestCase("test", 1999, true)]
-        public void WhenCalling_SearchMovies_WithValidCriteria_RepositoryMethodCalled(string movieTitle, short yearOfRelease, bool hasGenres)
+        public async Task WhenCalling_SearchMovies_WithValidCriteria_RepositoryMethodCalled(string movieTitle, short yearOfRelease, bool hasGenres)
         {
-            //arrange
+            // Arrange
             var criteria = new MovieSearchCriteria
             {
                 Title = movieTitle,
@@ -36,13 +38,14 @@ namespace Movies.Business.Tests.MovieService
                 Genres = hasGenres ? GetGenreList() : null
             };
 
-            //act
-            var result = GetService().SearchMoviesAsync(criteria);
+            // Act
+            await GetService().SearchMovies(criteria, GetCancellationToken());
 
-            //assert
-            MockMovieRepository.Verify(s => s.SearchMoviesAsync(It.Is<MovieSearchCriteria>(p => p.Title == movieTitle 
+            // Assert
+            MockMovieRepository.Verify(s => s.SearchMovies(It.Is<MovieSearchCriteria>(p => p.Title == movieTitle 
                                                                                         && p.YearOfRelease == yearOfRelease 
-                                                                                        && (hasGenres && p.Genres == p.Genres || p.Genres == null)))
+                                                                                        && (hasGenres && p.Genres == p.Genres || p.Genres == null)), 
+                                                                                        It.IsAny<CancellationToken>())
                                                                                         , Times.Once);
 
         }

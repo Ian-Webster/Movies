@@ -2,17 +2,49 @@
 
 # Movies
 
-API for movie ratings.
+## Introduction
+This project was originally a coding challenge I completed a few years ago (you can see the original requirements for the challenge in the [Requirements](#requirements) section) the scope has been expanded to provide a demonstration of backend and frontend technologies.
 
-**Set up**
-Written in Visual Studio 2017, using asp.net core 2.0.
+## Setup
+The solution is split into three main parts;
+1. A web API and associated supporting libraries
+2. A MS SQL database project
+3. A collection of UX projects
 
-Solution is set up to use a local MS SQL instance, a database name of "Movies" is assumed, windows authentication is assumed. If either of these need to be changed you will need to edit the "DefaultConnectionString" in the app.settings.json file in the Movies.API project.
+### Web API
+The original brief called for a web API and the bulk of the projects came from my initial implementation, the project structures are as follows;
 
-**Swagger**
-I've used swagger (https://swagger.io) to provide a front end for testing the APIs. The default root for the project is swagger/index.html.
+| Name                  | Notes                                                                                                                                                                  |
+|-----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Movies.API            | The main API for the project                                                                                                                                           |
+| Movies.Business       | Business logic for the solution                                                                                                                                        |
+| Movies.Database       | A MS SQL Visual Studio project for publishing the database used by the solution, there is a readme file in the root of the project detailing how to setup the database |
+| Movies.Domain         | Contains models for the solution                                                                                                                                       |
+| Movies.Infrastructure | IoC setup project for the solution                                                                                                                                     |
+| Movies.Repository     | Data access for the solution                                                                                                                                           |
 
-I've enabled documentation for swagger so hopefully the swagger UI should provide enough details to use the APIs.
+All the projects (with the exception of Movies.Database) are .net 8, all projects run in Visual Studio 2022.
+
+For Movies.API you'll need to set some [user secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows#use-visual-studio) for the database connection string, your user secrets should look like;
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.;Database=Movies.Database;User Id=sa;Password=HelloWorld!!1234;MultipleActiveResultSets=true;TrustServerCertificate=Yes;"
+  }
+}
+```
+**note** exposing usernames and passwords is poor practice, I'm ignoring this to make setup and running of this project as simple as possible, also note you'd usually be able to use windows authentication in your SQL connection string but my setup uses a docker instances of SQL server so a username and password are required.
+
+Finally there are a number of unit test projects.
+
+### UX projects
+In the \ux folder you'll find the various frontend implementations. 
+
+The implementations follow the naming convention of Movies.Ux.TechnologyName.
+
+Each implementation has it's own readme detailing and setup / instructions you might require.
+
+## <a name="requirements></a> Requirements
 
 **Search Movies:**
  - End point = /api/SearchMovies
@@ -53,12 +85,3 @@ I've enabled documentation for swagger so hopefully the swagger UI should provid
 	 - 200 if rating saved successfully
 	 - 404 if the movie or the user are not found
 	 - 400 if the rating Json object is invalid
-
-**Future Improvements**
- - Front end project (probably using Angular)
- - ~~Unit tests for the API project~~
- - ~~Unit tests for the Repository project~~
- - ~~Implement Async through out the solution~~
- - Additional APIs
-	 - Movie add / edit
-	 - User add / edit

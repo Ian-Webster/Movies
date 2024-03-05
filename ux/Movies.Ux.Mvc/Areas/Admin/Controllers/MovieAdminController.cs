@@ -3,32 +3,33 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Movies.Business.Interfaces;
 using Movies.Domain.DTO;
 using Movies.Domain.Enums;
+using Movies.Ux.Mvc.Controllers;
 
 namespace Movies.Ux.Mvc.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class MovieController : Controller
+    public class MovieAdminController : BaseController
     {
         private readonly IMovieService _movieService;
 
-        public MovieController(IMovieService movieService)
+        public MovieAdminController(IMovieService movieService)
         {
             _movieService = movieService;
         }
 
-        // GET: MovieController
+        // GET: MovieAdminController
         public async Task<ActionResult> Index()
         {
-            var movies = await _movieService.GetMoviesAsync();
+            var movies = await _movieService.GetMovies(GetCancellationToken());
             return View(movies);
         }
 
-        // GET: MovieController/Details/5
+        // GET: MovieAdminController/Details/5
         public async Task<ActionResult<Movie>> Details(Guid id)
         {
             try
             {
-                var movie = await _movieService.GetMovieAsync(id);
+                var movie = await _movieService.GetMovie(id, GetCancellationToken());
                 return View(movie);
             }
             catch (Exception ex)
@@ -39,19 +40,19 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
             }
         }
 
-        // GET: MovieController/Create
+        // GET: MovieAdminController/Create
         public ActionResult Create()
         {
             SetGenreSelectList();
             return View(new Movie{ Id = Guid.NewGuid()});
         }
 
-        // POST: MovieController/Create
+        // POST: MovieAdminController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Movie movie)
         {
-            var movieAdded = await _movieService.SaveMovieAsync(movie);
+            var movieAdded = await _movieService.SaveMovie(movie, GetCancellationToken());
             if (movieAdded)
             {
                 return RedirectToAction(nameof(Details), new { id = movie.Id });
@@ -62,20 +63,20 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
             }
         }
 
-        // GET: MovieController/Edit/5
+        // GET: MovieAdminController/Edit/5
         public async Task<ActionResult> Edit(Guid id)
         {
-            var movie = await _movieService.GetMovieAsync(id);
+            var movie = await _movieService.GetMovie(id, GetCancellationToken());
             SetGenreSelectList();
             return movie != null ? View(movie) : NotFound();
         }
 
-        // POST: MovieController/Edit/5
+        // POST: MovieAdminController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Movie movie)
         {
-            var movieUpdated = await _movieService.SaveMovieAsync(movie);
+            var movieUpdated = await _movieService.SaveMovie(movie, GetCancellationToken());
 
             return movieUpdated ? RedirectToAction(nameof(Details), new { id = movie.Id }) : BadRequest("unable to save movie");
         }

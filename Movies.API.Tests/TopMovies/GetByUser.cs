@@ -4,6 +4,7 @@ using Moq;
 using dto = Movies.Domain.DTO;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Movies.API.Tests.TopMovies
@@ -13,27 +14,25 @@ namespace Movies.API.Tests.TopMovies
     {
 
         [Test]
-        public void Should_ReturnBadRequest_WhenUserIdInvalid()
+        public async Task Should_ReturnBadRequest_WhenUserIdInvalid()
         {
             // Arrange / Act
-            var asyncResult = GetController().Get(Guid.Empty);
+            var result = await GetController().Get(Guid.Empty);
 
             // Assert
-            var result = asyncResult.Result;
             Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
         }
 
         [Test]
-        public void Should_ReturnBadRequestObject_WhenUserDoesNotExist()
+        public async Task Should_ReturnBadRequestObject_WhenUserDoesNotExist()
         {
             // Arrange
-            MockUserService.Setup(s => s.UserExistsAsync(It.IsAny<Guid>())).Returns(Task.FromResult(false));
+            MockUserService.Setup(s => s.UserExists(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(false));
 
             // Act
-            var asyncResult = GetController().Get(Guid.NewGuid());
+            var result = await GetController().Get(Guid.NewGuid());
 
             // Assert
-            var result = asyncResult.Result;
             Assert.That(result, Is.InstanceOf<BadRequestObjectResult>());
         }
 
@@ -44,7 +43,7 @@ namespace Movies.API.Tests.TopMovies
             await GetController().Get(Guid.NewGuid());
 
             // Assert
-            MockMovieService.Verify(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<Guid>()), Times.Once);
+            MockMovieService.Verify(s => s.TopMoviesByUser(It.IsAny<byte>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestCase(true)]
@@ -54,11 +53,15 @@ namespace Movies.API.Tests.TopMovies
             // Arrange
             if (isNull)
             {
-                MockMovieService.Setup(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<Guid>())).Returns(Task.FromResult(null as List<dto.Movie>));
+                MockMovieService
+                    .Setup(s => s.TopMoviesByUser(It.IsAny<byte>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                    .Returns(Task.FromResult(null as IEnumerable<dto.Movie>));
             }
             else
             {
-                MockMovieService.Setup(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<Guid>())).Returns(Task.FromResult(new List<dto.Movie>()));
+                MockMovieService
+                    .Setup(s => s.TopMoviesByUser(It.IsAny<byte>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                    .Returns(Task.FromResult((IEnumerable<dto.Movie>)new List<dto.Movie>()));
             }
 
             // Act
@@ -72,7 +75,9 @@ namespace Movies.API.Tests.TopMovies
         public async Task Should_ReturnJsonResult()
         {
             // Arrange
-            MockMovieService.Setup(s => s.TopMoviesByUserAsync(It.IsAny<byte>(), It.IsAny<Guid>())).Returns(Task.FromResult(new List<dto.Movie> { new dto.Movie() }));
+            MockMovieService
+                .Setup(s => s.TopMoviesByUser(It.IsAny<byte>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult((IEnumerable<dto.Movie>)new List<dto.Movie> { new dto.Movie() }));
 
             // Act
             var result = await GetController().Get(Guid.NewGuid());

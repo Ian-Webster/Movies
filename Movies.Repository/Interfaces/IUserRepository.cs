@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Movies.Domain.DTO;
 
@@ -11,21 +12,23 @@ namespace Movies.Repository.Interfaces
         /// Checks if the given user exists
         /// </summary>
         /// <param name="userId"></param>
+        /// <param name="token"></param>
         /// <returns></returns>
-        Task<bool> UserExistsAsync(Guid userId);
+        Task<bool> UserExists(Guid userId, CancellationToken token);
 
         /// <summary>
         /// Gets all users
         /// </summary>
         /// <returns></returns>
-        Task<List<User>> AllUsersAsync();
+        Task<IEnumerable<User>> AllUsers(CancellationToken token);
 
         /// <summary>
         /// Gets a user by the given id
         /// </summary>
         /// <param name="userId"></param>
+        /// <param name="token"></param>
         /// <returns></returns>
-        Task<User> GetUserAsync(Guid userId);
+        Task<User?> GetUser(Guid userId, CancellationToken token);
 
         /// <summary>
         /// Saves the given user
@@ -34,7 +37,8 @@ namespace Movies.Repository.Interfaces
         /// If the user doesn't exist will create one otherwise will update the existing one
         /// </remarks>
         /// <param name="user"></param>
+        /// <param name="token"></param>
         /// <returns></returns>
-        Task<bool> SaveUserAsync(User user);
+        Task<bool> SaveUser(User user, CancellationToken token);
     }
 }

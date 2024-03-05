@@ -10,7 +10,7 @@ namespace Movies.API.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/Movie")]
-    public class MovieController : Controller
+    public class MovieController : BaseController
     {
 
         private readonly IMovieService _movieService;
@@ -25,7 +25,7 @@ namespace Movies.API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Saves a movie
         /// </summary>
         /// <param name="movie"></param>
         /// <returns></returns>
@@ -33,7 +33,7 @@ namespace Movies.API.Controllers
         [ProducesResponseType(200, Type = typeof(Movie))]
         public async Task<IActionResult> Post([FromBody]Movie movie)
         {
-            if (await _movieService.SaveMovieAsync(movie))
+            if (await _movieService.SaveMovie(movie, GetCancellationToken()))
             {
                 return Ok();
             }

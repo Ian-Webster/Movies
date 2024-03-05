@@ -13,7 +13,7 @@
             @await Html.PartialAsync("_UserFormFields")
             <div class="form-group">
                 <label asp-for="UserName" class="control-label">Password</label>
-                @Html.PasswordFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
             @await Html.PartialAsync("_formButtons")

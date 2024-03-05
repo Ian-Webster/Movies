@@ -3,6 +3,7 @@ using Movies.Domain.DTO;
 using Movies.Domain.Enums.Validation;
 using Movies.Repository.Interfaces;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Movies.Business
@@ -20,28 +21,28 @@ namespace Movies.Business
             _userService = userService;
         }
 
-        public async Task<bool> SaveRatingAsync(MovieRating movieRating)
+        public async Task<bool> SaveRating(MovieRating movieRating, CancellationToken token)
         {
-            var validationResult = await ValidateMovieRatingAsync(movieRating);
+            var validationResult = await ValidateMovieRating(movieRating, token);
 
             switch(validationResult)
             {
                 case MovieRatingSaveValidationResults.NullRating:
-                    throw new ArgumentException("movieRating must not be null", "movieRating");
+                    throw new ArgumentException("movieRating must not be null", nameof(movieRating));
                 case MovieRatingSaveValidationResults.InvalidMovieId:
-                    throw new ArgumentException("movieRating.MovieId must be greater than zero", "movieRating");
+                    throw new ArgumentException("movieRating.MovieId must be greater than zero", nameof(movieRating));
                 case MovieRatingSaveValidationResults.MovieNotfound:
-                    throw new ArgumentException($"Move not found for movieRating.MovieId {movieRating.MovieId} not found", "movieRating");
+                    throw new ArgumentException($"Move not found for movieRating.MovieId {movieRating.MovieId} not found", nameof(movieRating));
                 case MovieRatingSaveValidationResults.InvalidUserId:
-                    throw new ArgumentException("movieRating.UserId must be greater than zero", "movieRating");
+                    throw new ArgumentException("movieRating.UserId must be greater than zero", nameof(movieRating));
                 case MovieRatingSaveValidationResults.UserNotFound:
-                    throw new ArgumentException($"User note found for movieRating.UserId {movieRating.UserId} must not be zero", "movieRating");
+                    throw new ArgumentException($"User note found for movieRating.UserId {movieRating.UserId} must not be zero", nameof(movieRating));
             }
 
-            return await _ratingRepository.SaveRatingAsync(movieRating);
+            return await _ratingRepository.SaveRating(movieRating, token);
         }
 
-        public async Task<MovieRatingSaveValidationResults> ValidateMovieRatingAsync(MovieRating movieRating)
+        public async Task<MovieRatingSaveValidationResults> ValidateMovieRating(MovieRating movieRating, CancellationToken token)
         {
             if (movieRating == null)
             {
@@ -53,7 +54,7 @@ namespace Movies.Business
                 return MovieRatingSaveValidationResults.InvalidMovieId;
             }
 
-            if (!await _movieService.MovieExistsAsync(movieRating.MovieId))
+            if (!await _movieService.MovieExists(movieRating.MovieId, token))
             {
                 return MovieRatingSaveValidationResults.MovieNotfound;
             }
@@ -63,7 +64,7 @@ namespace Movies.Business
                 return MovieRatingSaveValidationResults.InvalidUserId;
             }
 
-            if (! await _userService.UserExistsAsync(movieRating.UserId))
+            if (! await _userService.UserExists(movieRating.UserId, token))
             {
                 return MovieRatingSaveValidationResults.UserNotFound;
             }

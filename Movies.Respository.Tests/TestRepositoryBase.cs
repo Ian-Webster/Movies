@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading;
+using DataAccess.Repository;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Movies.Repository.Tests
 {
@@ -17,6 +20,16 @@ namespace Movies.Repository.Tests
         protected Context GetContext()
         {
             return new Context(options.Options);
+        }
+
+        protected UnitOfWork<Context> GetUnitOfWork()
+        {
+            return new UnitOfWork<Context>(GetContext(), new NullLoggerFactory());
+        }
+
+        protected CancellationToken GetCancellationToken()
+        {
+            return new CancellationToken();
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
@@ -12,17 +13,15 @@ namespace Movies.API.Tests.Movie
 
         [TestCase(true)]
         [TestCase(false)]
-        public void Should_ReturnOKStatus_WhenMovieIsSaved(bool isSaved)
+        public async Task Should_ReturnOKStatus_WhenMovieIsSaved(bool isSaved)
         {
-            //arrange
-            MockMovieService.Setup(s => s.SaveMovieAsync(It.IsAny<dto.Movie>())).Returns(Task.FromResult(isSaved));
+            // Arrange
+            MockMovieService.Setup(s => s.SaveMovie(It.IsAny<dto.Movie>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(isSaved));
 
-            //act
-            var asyncResult = GetController().Post(new dto.Movie());
+            // Act
+            var result = await GetController().Post(new dto.Movie());
 
-            //assert
-            var result = asyncResult.Result;
-
+            // Assert
             if (isSaved)
             {
                 Assert.That(result, Is.InstanceOf<OkResult>());

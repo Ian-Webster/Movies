@@ -3,6 +3,7 @@ using Moq;
 using dto = Movies.Domain.DTO;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -15,46 +16,46 @@ namespace Movies.API.Tests.TopMovies
         [Test]
         public async Task Should_CallCorrectServiceMethodAsync()
         {
-            //arrange/act
+            // Arrange / Act
             await GetController().Get();
 
-            //assert
-            MockMovieService.Verify(s => s.TopMoviesAsync(It.IsAny<byte>()), Times.Once);
+            // Assert
+            MockMovieService.Verify(s => s.TopMovies(It.IsAny<byte>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestCase(true)]
         [TestCase(false)]
-        public void Should_ReturnNotFound_IfMoviesAreNullOrEmpty(bool isNull)
+        public async Task Should_ReturnNotFound_IfMoviesAreNullOrEmpty(bool isNull)
         {
-            //arrange
+            // Arrange
             if (isNull)
             {
-                MockMovieService.Setup(s => s.TopMoviesAsync(It.IsAny<byte>())).Returns(Task.FromResult(null as List<dto.Movie>));
+                MockMovieService.Setup(s => s.TopMovies(It.IsAny<byte>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(null as IEnumerable<dto.Movie>));
             }
             else
             {
-                MockMovieService.Setup(s => s.TopMoviesAsync(It.IsAny<byte>())).Returns(Task.FromResult(new List<dto.Movie>()));
+                MockMovieService.Setup(s => s.TopMovies(It.IsAny<byte>(), It.IsAny<CancellationToken>()))
+                    .Returns(Task.FromResult((IEnumerable<dto.Movie>)new List<dto.Movie>()));
             }
 
-            //act
-            var asyncResult = GetController().Get();
+            // Act
+            var result = await GetController().Get();
 
-            //assert
-            var result = asyncResult.Result;
+            // Assert
             Assert.That(result, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
-        public void Should_ReturnJsonResult()
+        public async Task Should_ReturnJsonResult()
         {
-            //arrange
-            MockMovieService.Setup(s => s.TopMoviesAsync(It.IsAny<byte>())).Returns(Task.FromResult(new List<dto.Movie> { new dto.Movie() }));
+            // Arrange
+            MockMovieService.Setup(s => s.TopMovies(It.IsAny<byte>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult((IEnumerable<dto.Movie>)new List<dto.Movie> { new dto.Movie() }));
 
-            //act
-            var asyncResult = GetController().Get();
+            // Act
+            var result = await GetController().Get();
 
-            //assert
-            var result = asyncResult.Result;
+            // Assert
             Assert.That(result, Is.InstanceOf<JsonResult>());
         }
 

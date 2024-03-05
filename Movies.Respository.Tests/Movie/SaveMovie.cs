@@ -4,14 +4,15 @@ using dto = Movies.Domain.DTO;
 using repo = Movies.Repository.Entities;
 using Movies.Domain.Enums;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Movies.Repository.Tests.Movie
 {
     [TestFixture]
-    public class SaveMovieAsync : MovieRepositoryBase
+    public class SaveMovie : MovieRepositoryBase
     {
         [Test]
-        public void Should_AddNewMovies()
+        public async Task Should_AddNewMovies()
         {
             //arrange
             var newMovie = new dto.Movie { Id = Guid.NewGuid(), Genre = Genres.Action, RunningTime = 100, Title = "test movie", YearOfRelease = 1999 };
@@ -23,8 +24,10 @@ namespace Movies.Repository.Tests.Movie
                 existingMovieCount = context.MovieDbSet.Count();
             }
 
+            var repo = GetRepository();
+
             //act
-            var result = GetRepository().SaveMovieAsync(newMovie);
+            await repo.SaveMovie(newMovie, GetCancellationToken());
 
             //assert
             var newMovieCount = 0;
@@ -64,7 +67,7 @@ namespace Movies.Repository.Tests.Movie
             };
 
             //act
-            var result = GetRepository().SaveMovieAsync(updatedMovie);
+            var result = GetRepository().SaveMovie(updatedMovie, GetCancellationToken());
 
             //assert
             var newMovieCount = 0;

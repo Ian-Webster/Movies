@@ -1,18 +1,26 @@
-﻿using Movies.Domain.DTO;
-using Movies.Repository.Interfaces;
-using System.Linq;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using DataAccess.Repository;
+using Movies.Repository.Interfaces;
+using MovieRating = Movies.Domain.DTO.MovieRating;
 using Repo = Movies.Repository.Entities;
 
-namespace Movies.Repository
+namespace Movies.Repository.Repositories
 {
-    public class RatingRepository : BaseRepository, IRatingRepository
+    public class RatingRepository : IRatingRepository
     {
-        public RatingRepository(Context context) : base(context) { }
+        private readonly UnitOfWork<Context> _unitOfWork;
+        private readonly IRepository<Repo.MovieRating> _ratingRepository;
 
-        public async Task<bool> SaveRatingAsync(MovieRating movieRating)
+        public RatingRepository(UnitOfWork<Context> unitOfWork)
         {
-            var rating = _context.MovieRatingDbSet.FirstOrDefault(mr => mr.MovieId == movieRating.MovieId && mr.UserId == movieRating.UserId);
+            _unitOfWork = unitOfWork;
+            _ratingRepository = _unitOfWork.Repository<Repo.MovieRating>();
+        }
+
+        public async Task<bool> SaveRating(MovieRating movieRating, CancellationToken token)
+        {
+            var rating = await _ratingRepository.FirstOrDefault(mr => mr.MovieId == movieRating.MovieId && mr.UserId == movieRating.UserId, token);
 
             if (rating != null)
             {
@@ -27,10 +35,13 @@ namespace Movies.Repository
                     Rating = movieRating.Rating
                 };
 
-                _context.MovieRatingDbSet.Add(rating);
+              if (! await _ratingRepository.Add(rating, token)) return false;
             }
 
-            return await _context.SaveChangesAsync() > 0;
+            //TODO: reverse this once https://github.com/Ian-Webster/DataAccess/issues/30 is fixed
+            //return await _unitOfWork.Save(token);
+            await _unitOfWork.Save(token);
+            return true;
         }
 
     }

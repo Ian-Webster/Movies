@@ -1,8 +1,6 @@
-﻿using Moq;
+﻿using System.Threading;
+using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using dto = Movies.Domain.DTO;
 
@@ -12,30 +10,29 @@ namespace Movies.Business.Tests.MovieService
     public class SaveMovieAsync : MovieServiceBase
     {
         [Test]
-        public void Should_CallRepositoryMethod()
+        public async Task Should_CallRepositoryMethod()
         {
-            //arrange
+            // Arrange
             var newMovie = new dto.Movie();
 
-            //act
-            var result = GetService().SaveMovieAsync(newMovie);
+            // Act
+            await GetService().SaveMovie(newMovie, GetCancellationToken());
 
-            //assert
-            MockMovieRepository.Verify(s => s.SaveMovieAsync(newMovie), Times.Once);
+            // Assert
+            MockMovieRepository.Verify(s => s.SaveMovie(newMovie, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestCase(true)]
         [TestCase(false)]
-        public void Should_ReturnTrueWhen_SaveSucceeds(bool saveSuccess)
+        public async Task Should_ReturnTrueWhen_SaveSucceeds(bool saveSuccess)
         {
-            //arrange
-            MockMovieRepository.Setup(s => s.SaveMovieAsync(It.IsAny<dto.Movie>())).Returns(Task.FromResult(saveSuccess));
+            // Arrange
+            MockMovieRepository.Setup(s => s.SaveMovie(It.IsAny<dto.Movie>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(saveSuccess));
 
-            //act
-            var asyncResult = GetService().SaveMovieAsync(new dto.Movie());
+            // Act
+            var result = await GetService().SaveMovie(new dto.Movie(), GetCancellationToken());
 
-            //assert
-            var result = asyncResult.Result;
+            // Assert
             if (saveSuccess)
             {
                 Assert.That(result, Is.True);

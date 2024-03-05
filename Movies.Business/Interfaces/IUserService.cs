@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Movies.Domain.DTO;
 
@@ -11,8 +12,9 @@ namespace Movies.Business.Interfaces
         /// Checks if this given user exists
         /// </summary>
         /// <param name="userId"></param>
+        /// <param name="token"></param>
         /// <returns></returns>
-        Task<bool> UserExistsAsync(Guid userId);
+        Task<bool> UserExists(Guid userId, CancellationToken token);
 
         /// <summary>
         /// Hashes the given password
@@ -25,14 +27,15 @@ namespace Movies.Business.Interfaces
         /// Gets all users
         /// </summary>
         /// <returns></returns>
-        Task<List<User>> AllUsersAsync();
+        Task<IEnumerable<User>> AllUsers(CancellationToken token);
 
         /// <summary>
         /// Gets a user by the given id
         /// </summary>
         /// <param name="userId"></param>
+        /// <param name="token"></param>
         /// <returns></returns>
-        Task<User> GetUserAsync(Guid userId);
+        Task<User> GetUser(Guid userId, CancellationToken token);
 
         /// <summary>
         /// Saves the given user
@@ -42,6 +45,6 @@ namespace Movies.Business.Interfaces
         /// </remarks>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task<bool> SaveUserAsync(User user);
+        Task<bool> SaveUser(User user, CancellationToken token);
     }
 }

@@ -11,7 +11,7 @@ namespace Movies.API.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/SaveMovieRating")]
-    public class SaveMovieRatingController : Controller
+    public class SaveMovieRatingController : BaseController
     {
         private readonly IRatingService _ratingService;
 
@@ -32,12 +32,12 @@ namespace Movies.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]MovieRating movieRating)
         {
-            var validationResult = await _ratingService.ValidateMovieRatingAsync(movieRating);
+            var validationResult = await _ratingService.ValidateMovieRating(movieRating, GetCancellationToken());
 
             switch (validationResult)
             {
                 case MovieRatingSaveValidationResults.OK:
-                    if (await _ratingService.SaveRatingAsync(movieRating))
+                    if (await _ratingService.SaveRating(movieRating, GetCancellationToken()))
                     {
                         return Ok();
                     }
