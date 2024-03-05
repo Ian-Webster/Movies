@@ -44,7 +44,7 @@ The implementations follow the naming convention of Movies.Ux.TechnologyName.
 
 Each implementation has it's own readme detailing and setup / instructions you might require.
 
-## <a name="requirements></a> Requirements
+## <a name="requirements"></a> Requirements
 
 **Search Movies:**
  - End point = /api/SearchMovies
