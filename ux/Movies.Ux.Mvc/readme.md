@@ -21,4 +21,18 @@ You'll need to set some [user secrets](https://learn.microsoft.com/en-us/aspnet/
 ```
 
 ## Routes
-The project has a menu which will take you to most routes but there is a full list of routes in the project;
+The project has a menu which will take you to most routes, however here is a full list of routes in the project;
+* public routes
+    * https://localhost:7069/Movie - all movies
+    * https://localhost:7069/Movie/Details/some-guid - details for a specific movie
+    * https://localhost:7069/MovieRating/TopX/X - top X movies across all users
+    * https://localhost:7069/MovieRating/TopX/X/some-guid - top X movies for a specific user
+* admin routes
+    * https://localhost:7069/Admin/MovieAdmin - all movies
+    * https://localhost:7069/Admin/MovieAdmin/Create - create movie
+    * https://localhost:7069/Admin/MovieAdmin/Edit/some-guid - edit movie
+    * https://localhost:7069/Admin/MovieAdmin/Details/some-guid - movie details
+    * https://localhost:7069/Admin/User - users list
+    * https://localhost:7069/Admin/User/Create - create user
+    * https://localhost:7069/Admin/MovieAdmin/Edit/some-guid - edit user
+    * https://localhost:7069/Admin/MovieAdmin/Details/some-guid - user details
