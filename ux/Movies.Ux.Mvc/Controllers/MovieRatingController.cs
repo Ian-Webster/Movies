@@ -42,7 +42,7 @@ namespace Movies.Ux.Mvc.Controllers
 
         // POST: MovieRatingController/Rate
         [HttpPost]
-        /*[ValidateAntiForgeryToken]*/
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Rate(MovieRating movieRating)
         {
             var validationResult = await _ratingService.ValidateMovieRating(movieRating, GetCancellationToken());

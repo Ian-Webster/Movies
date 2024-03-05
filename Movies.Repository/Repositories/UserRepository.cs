@@ -64,8 +64,11 @@ namespace Movies.Repository.Repositories
             {
                 userDao.UserName = user.UserName;
             }
-            
-            return await _unitOfWork.Save(token);
+
+            //TODO: reverse this once https://github.com/Ian-Webster/DataAccess/issues/30 is fixed
+            //return await _unitOfWork.Save(token);
+            await _unitOfWork.Save(token);
+            return true;
         }
 
     }

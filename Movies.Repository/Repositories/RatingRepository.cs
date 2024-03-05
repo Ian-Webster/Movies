@@ -38,7 +38,10 @@ namespace Movies.Repository.Repositories
               if (! await _ratingRepository.Add(rating, token)) return false;
             }
 
-            return await _unitOfWork.Save(token);
+            //TODO: reverse this once https://github.com/Ian-Webster/DataAccess/issues/30 is fixed
+            //return await _unitOfWork.Save(token);
+            await _unitOfWork.Save(token);
+            return true;
         }
 
     }

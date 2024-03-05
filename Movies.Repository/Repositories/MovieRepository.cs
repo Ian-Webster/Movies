@@ -92,17 +92,25 @@ namespace Movies.Repository.Repositories
             {
                 movieDao = new Repo.Movie
                 {
-                    Id = movie.Id
+                    Id = movie.Id,
+                    Title = movie.Title,
+                    GenreId = (short)movie.Genre,
+                    YearOfRelease = movie.YearOfRelease,
+                    RunningTime = movie.RunningTime
                 };
-                await _movieRepository.Add(movieDao, token);
+                if (!await _movieRepository.Add(movieDao, token)) return false;
             }
-
-            movieDao.GenreId = (short)movie.Genre;
-            movieDao.RunningTime = movie.RunningTime;
-            movieDao.Title = movie.Title;
-            movieDao.YearOfRelease = movie.YearOfRelease;
-
-            return await _unitOfWork.Save(token);
+            else
+            {
+                movieDao.GenreId = (short)movie.Genre;
+                movieDao.RunningTime = movie.RunningTime;
+                movieDao.Title = movie.Title;
+                movieDao.YearOfRelease = movie.YearOfRelease;
+            }
+            //TODO: reverse this once https://github.com/Ian-Webster/DataAccess/issues/30 is fixed
+            //return await _unitOfWork.Save(token);
+            await _unitOfWork.Save(token);
+            return true;
         }
 
         private readonly Expression<Func<Repo.Movie, Movie>> _movieProjection = m => new Movie
