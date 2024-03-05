@@ -22,6 +22,10 @@ jobs:
       with:
         dotnet-version: 8.0.x        
 
+    # Set up local NuGet repo
+    - name: Setup GitHub NuGet
+      run: dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Ian-Webster/index.json"
+      
     # Resource NuGet dependencies
     - name: Restore dependencies
       run: dotnet restore
