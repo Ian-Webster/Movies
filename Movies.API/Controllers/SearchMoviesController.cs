@@ -13,7 +13,7 @@ namespace Movies.API.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/SearchMovies")]
-    public class SearchMoviesController : Controller
+    public class SearchMoviesController : BaseController
     {
         private readonly IMovieService _movieService;
 
@@ -45,14 +45,14 @@ namespace Movies.API.Controllers
                     return BadRequest(validationResult.ToString());                
             }
 
-            var movies = await _movieService.SearchMoviesAsync(criteria);
+            var movies = await _movieService.SearchMovies(criteria, GetCancellationToken());
 
             if (movies == null || !movies.Any())
             {
                 return NotFound();
             }
 
-            return Json(movies);
+            return new JsonResult(movies);
         }
 
     }

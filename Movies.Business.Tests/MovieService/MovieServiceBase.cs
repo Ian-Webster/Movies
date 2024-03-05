@@ -5,10 +5,11 @@ using Movies.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Movies.Business.Tests.Shared;
 
 namespace Movies.Business.Tests.MovieService
 {
-    public class MovieServiceBase
+    public class MovieServiceBase: BusinessServiceBase
     {
         protected readonly Mock<IMovieRepository> MockMovieRepository;
         protected readonly Mock<IUserService> MockUserService;

@@ -18,7 +18,7 @@ namespace Movies.Repository.Tests.Rating
             var rating = new MovieRating { MovieId = Guid.NewGuid(), Rating = 2, UserId = Guid.NewGuid() };
 
             // Act
-            await GetRepository().SaveRatingAsync(rating);
+            await GetRepository().SaveRating(rating, GetCancellationToken());
 
             var ratingCount = 0;
             var firstRating = new Repo.MovieRating();
@@ -49,7 +49,7 @@ namespace Movies.Repository.Tests.Rating
             InsertRating(existingRating);
 
             // Act
-            await GetRepository().SaveRatingAsync(newRating);
+            await GetRepository().SaveRating(newRating, GetCancellationToken());
 
             var ratingCount = 0;
             var firstRating = new Repo.MovieRating();

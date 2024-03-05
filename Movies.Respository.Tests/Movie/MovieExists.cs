@@ -27,7 +27,7 @@ namespace Movies.Repository.Tests.Movie
             }
 
             //act
-            var result = await GetRepository().MovieExistsAsync(movieId);
+            var result = await GetRepository().MovieExists(movieId, GetCancellationToken());
 
             //assert
             if (moviesExists)

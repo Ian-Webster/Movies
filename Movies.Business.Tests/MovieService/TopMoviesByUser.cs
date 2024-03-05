@@ -1,8 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Movies.Business.Tests.MovieService
@@ -11,27 +10,27 @@ namespace Movies.Business.Tests.MovieService
     public class TopMoviesByUser : MovieServiceBase
     {
         [Test]
-        public void Should_ThrowException_MovieCountIsZero()
+        public async Task Should_ThrowException_MovieCountIsZero()
         {
             // Arrange / Act / Assert
-            Assert.That(() => GetService().TopMoviesByUserAsync(0, Guid.NewGuid()), Throws.ArgumentException);
+            await Assert.ThatAsync(() => GetService().TopMoviesByUser(0, Guid.NewGuid(), GetCancellationToken()), Throws.ArgumentException);
         }
 
         [Test]
-        public void Should_ThrowException_WhenUserIdIsEmpty()
+        public async Task Should_ThrowException_WhenUserIdIsEmpty()
         {
             // Arrange / Act / Assert
-            Assert.That(() => GetService().TopMoviesByUserAsync(1, Guid.Empty), Throws.ArgumentException);
+            await Assert.ThatAsync(() => GetService().TopMoviesByUser(1, Guid.Empty, GetCancellationToken()), Throws.ArgumentException);
         }
 
         [Test]
-        public void Should_ThrowException_WhenUserDoesNotExist()
+        public async Task Should_ThrowException_WhenUserDoesNotExist()
         {
             // Arrange
-            MockUserService.Setup(s => s.UserExistsAsync(It.IsAny<Guid>())).Returns(Task.FromResult(false));
+            MockUserService.Setup(s => s.UserExists(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(false));
 
             // Act / Assert
-            Assert.That(() => GetService().TopMoviesByUserAsync(1, Guid.NewGuid()), Throws.ArgumentException);
+            await Assert.ThatAsync(() => GetService().TopMoviesByUser(1, Guid.NewGuid(), GetCancellationToken()), Throws.ArgumentException);
         }
 
         [TestCase((byte)1, "27F271EA-D108-4CCE-B92A-C45050FB7CA1")]
@@ -41,14 +40,14 @@ namespace Movies.Business.Tests.MovieService
         {
             // Arrange
             var userId = Guid.Parse(userIdString);
-            MockUserService.Setup(s => s.UserExistsAsync(userId)).Returns(Task.FromResult(true));
+            MockUserService.Setup(s => s.UserExists(userId, It.IsAny<CancellationToken>())).Returns(Task.FromResult(true));
 
             // Act
-             await GetService().TopMoviesByUserAsync(movieCount, userId);
+             await GetService().TopMoviesByUser(movieCount, userId, GetCancellationToken());
 
             // Assert
-            MockUserService.Verify(s => s.UserExistsAsync(userId), Times.Once);
-            MockMovieRepository.Verify(s => s.TopMoviesByUserAsync(movieCount, userId), Times.Once);
+            MockUserService.Verify(s => s.UserExists(userId, It.IsAny<CancellationToken>()), Times.Once);
+            MockMovieRepository.Verify(s => s.TopMoviesByUser(movieCount, userId, It.IsAny<CancellationToken>()), Times.Once);
         }
 
     }

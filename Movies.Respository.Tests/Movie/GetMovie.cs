@@ -12,7 +12,7 @@ using NUnit.Framework.Legacy;
 namespace Movies.Repository.Tests.Movie;
 
 [TestFixture]
-public class GetMovieAsync : MovieRepositoryBase
+public class GetMovie : MovieRepositoryBase
 {
     [Test]
     public async Task Should_ReturnNull_WhenMovieNotFound()
@@ -22,7 +22,7 @@ public class GetMovieAsync : MovieRepositoryBase
         InsertMovies(movies);
 
         // Act
-        var result = await GetRepository().GetMovieAsync(Guid.NewGuid());
+        var result = await GetRepository().GetMovie(Guid.NewGuid(), GetCancellationToken());
 
         // Assert
         Assert.That(result, Is.Null);
@@ -35,7 +35,7 @@ public class GetMovieAsync : MovieRepositoryBase
         InsertMovies(movies);
 
         // Act
-        var result = await GetRepository().GetMovieAsync(expectedMovieDao.Id);
+        var result = await GetRepository().GetMovie(expectedMovieDao.Id, GetCancellationToken());
 
         // Assert
         var expectedMovie = new dto.Movie

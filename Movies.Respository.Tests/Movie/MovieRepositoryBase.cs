@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Movies.Repository.Repositories;
 using Movies.Repository.Tests.DataGeneration;
 using Repo = Movies.Repository.Entities;
 
@@ -23,7 +24,7 @@ namespace Movies.Repository.Tests.Movie
 
         protected MovieRepository GetRepository()
         {
-            return new MovieRepository(GetContext());
+            return new MovieRepository(GetUnitOfWork());
         }
 
         protected void UpdateTestMovieRatings()

@@ -3,6 +3,9 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="DataAccess.Repository" Version="3.0.1" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Movies.Business\Movies.Business.csproj" />
     <ProjectReference Include="..\Movies.Domain\Movies.Domain.csproj" />
     <ProjectReference Include="..\Movies.Repository\Movies.Repository.csproj" />

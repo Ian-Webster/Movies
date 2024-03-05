@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 
 namespace Movies.Business.Tests.MovieService
@@ -8,21 +10,21 @@ namespace Movies.Business.Tests.MovieService
     {
 
         [Test]
-        public void WhenCalling_TopMovies_WithInvalidMovieCount_ExpectException()
+        public async Task WhenCalling_TopMovies_WithInvalidMovieCount_ExpectException()
         {
-            //arrange/act/assert
-            Assert.That(() => GetService().TopMoviesAsync(0), Throws.ArgumentException);
+            // Arrange / Act / Assert
+            await Assert.ThatAsync(() => GetService().TopMovies(0, GetCancellationToken()), Throws.ArgumentException);
         }
 
         [TestCase((byte)1)]
         [TestCase((byte)2)]
-        public void WhenCalling_TopMovies_WithValidMovieCount_RepositoryMethodCalled(byte movieCount)
+        public async Task WhenCalling_TopMovies_WithValidMovieCount_RepositoryMethodCalled(byte movieCount)
         {
-            //arrange/act
-            var result = GetService().TopMoviesAsync(movieCount);
+            // Arrange / Act
+            await GetService().TopMovies(movieCount, GetCancellationToken());
 
-            //assert
-            MockMovieRepository.Verify(s => s.TopMoviesAsync(movieCount), Times.Once);
+            // Assert
+            MockMovieRepository.Verify(s => s.TopMovies(movieCount, It.IsAny<CancellationToken>()), Times.Once);
         }
 
     }

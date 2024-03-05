@@ -13,4 +13,7 @@
     <ProjectReference Include="..\Movies.Domain\Movies.Domain.csproj" />
     <ProjectReference Include="..\Movies.Repository\Movies.Repository.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Shared\" />
+  </ItemGroup>
 </Project>

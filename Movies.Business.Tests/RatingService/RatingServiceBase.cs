@@ -1,10 +1,11 @@
 ﻿using Moq;
 using Movies.Business.Interfaces;
+using Movies.Business.Tests.Shared;
 using Movies.Repository.Interfaces;
 
 namespace Movies.Business.Tests.RatingService
 {
-    public class RatingServiceBase
+    public class RatingServiceBase: BusinessServiceBase
     {
         protected readonly Mock<IRatingRepository> MockRatingRepository;
         protected readonly Mock<IMovieService> MockMovieService;

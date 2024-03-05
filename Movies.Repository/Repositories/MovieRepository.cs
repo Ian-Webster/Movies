@@ -1,145 +1,119 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+using DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
 using Movies.Domain.DTO;
 using Movies.Domain.Enums;
 using Movies.Repository.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Movie = Movies.Domain.DTO.Movie;
 using Repo = Movies.Repository.Entities;
 
-namespace Movies.Repository
+namespace Movies.Repository.Repositories
 {
-    public class MovieRepository : BaseRepository, IMovieRepository
+    public class MovieRepository : IMovieRepository
     {
-        public MovieRepository(Context context) : base(context) { }
+        private readonly UnitOfWork<Context> _unitOfWork;
+        private readonly IRepository<Repo.Movie> _movieRepository;
+        private readonly IRepository<Repo.MovieRating> _movieRatingRepository;
 
-        public async Task<bool> MovieExistsAsync(Guid movieId)
+        public MovieRepository(UnitOfWork<Context> unitOfWork)
         {
-            return await _context.MovieDbSet.AnyAsync(m => m.Id == movieId);
+            _unitOfWork = unitOfWork;
+            _movieRepository = _unitOfWork.Repository<Repo.Movie>();
+            _movieRatingRepository = _unitOfWork.Repository<Repo.MovieRating>();
         }
 
-        public async Task<List<Movie>> SearchMoviesAsync(MovieSearchCriteria movieSearchCritera)
+        public async Task<Movie?> GetMovie(Guid movieId, CancellationToken token)
         {
-            IQueryable<Repo.Movie> query = _context.MovieDbSet
-                .OrderBy(m => m.Title);
-
-            if (!string.IsNullOrWhiteSpace(movieSearchCritera.Title))
-            {
-                query = query.Where(m => m.Title.Contains(movieSearchCritera.Title));
-            }
-
-            if (movieSearchCritera.YearOfRelease > 0)
-            {
-                query = query.Where(m => m.YearOfRelease == movieSearchCritera.YearOfRelease);
-            }
-
-            if (movieSearchCritera.Genres != null && movieSearchCritera.Genres.Any())
-            {
-                var genreList = movieSearchCritera.Genres.Cast<int>().ToList();
-                query = query.Where(m => genreList.Contains(m.GenreId));
-            }
-
-            return await query.Select(m => new Movie
-                {
-                    AverageRating = m.AverageRating,
-                    Genre = (Genres)m.GenreId,
-                    Id = m.Id,
-                    RunningTime = m.RunningTime,
-                    Title = m.Title,
-                    YearOfRelease = m.YearOfRelease
-                })
-                .ToListAsync();
+            return await _movieRepository.FirstOrDefaultProjected(m => m.Id == movieId, 
+                _movieProjection,
+                token);
         }
 
-        public async Task<List<Movie>> TopMoviesAsync(byte movieCount)
+        public async Task<IEnumerable<Movie>?> GetMoviesAsync(CancellationToken token)
         {
-            return await _context.MovieDbSet
+            return await _movieRepository.ListProjected(m => true, _movieProjection, token);
+        }
+
+        public async Task<bool> MovieExists(Guid movieId, CancellationToken token)
+        {
+            return await _movieRepository.Exists(m => m.Id == movieId, token);
+        }
+
+        public async Task<IEnumerable<Movie>?> SearchMovies(MovieSearchCriteria movieSearchCriteria, CancellationToken token)
+        {
+            return await _movieRepository.ListProjected(
+                m => (string.IsNullOrWhiteSpace(movieSearchCriteria.Title) ||
+                      m.Title.Contains(movieSearchCriteria.Title)) &&
+                     (movieSearchCriteria.YearOfRelease == 0 || m.YearOfRelease == movieSearchCriteria.YearOfRelease) &&
+                     (movieSearchCriteria.Genres == null || movieSearchCriteria.Genres.Contains((Genres)m.GenreId)),
+                _movieProjection, 
+                token);
+        }
+
+        public async Task<IEnumerable<Movie>> TopMovies(byte movieCount, CancellationToken token)
+        {
+            return await _movieRepository.DbSet
+                .Where(m => true)
                 .OrderByDescending(m => m.AverageRating)
                 .ThenBy(m => m.Title)
+                .Select(_movieProjection)
                 .Take(movieCount)
-                .Select(m => new Movie
-                    {
-                        AverageRating = m.AverageRating,
-                        Genre = (Genres)m.GenreId,
-                        Id = m.Id,
-                        RunningTime = m.RunningTime,
-                        Title = m.Title,
-                        YearOfRelease = m.YearOfRelease
-                    })
-                .ToListAsync();
+                .ToListAsync(token);
         }
-        
-        public async Task<List<Movie>> TopMoviesByUserAsync(byte movieCount, Guid userId)
+
+        public async Task<IEnumerable<Movie>> TopMoviesByUser(byte movieCount, Guid userId, CancellationToken token)
         {
-            var movieRatings = _context.MovieRatingDbSet
+            return await _movieRatingRepository.DbSet
                 .Where(mr => mr.UserId == userId)
                 .OrderByDescending(mr => mr.Rating)
                 .ThenBy(mr => mr.Movie.Title)
-                .Take(movieCount);
-
-            return await movieRatings.Select(mr => new Movie
-            {
-                AverageRating = mr.Rating,
-                Genre = (Genres)mr.Movie.GenreId,
-                Id = mr.Movie.Id,
-                RunningTime = mr.Movie.RunningTime,
-                Title = mr.Movie.Title,
-                YearOfRelease = mr.Movie.YearOfRelease
-            }).ToListAsync();
-
+                .Take(movieCount)
+                .Select(mr => new Movie
+                {
+                    AverageRating = mr.Rating,
+                    Genre = (Genres)mr.Movie.GenreId,
+                    Id = mr.Movie.Id,
+                    RunningTime = mr.Movie.RunningTime,
+                    Title = mr.Movie.Title,
+                    YearOfRelease = mr.Movie.YearOfRelease
+                }).ToListAsync(token);
         }
 
-        public async Task<bool> SaveMovieAsync(Movie movie)
+        public async Task<bool> SaveMovie(Movie movie, CancellationToken token)
         {
-            var movieDao = movie.Id != Guid.Empty ? await _context.MovieDbSet.FindAsync(movie.Id): null;
+            var movieDao = movie.Id != Guid.Empty ? await _movieRepository.FirstOrDefault(m => m.Id == movie.Id, token): null;
+
             if (movieDao == null)
             {
                 movieDao = new Repo.Movie
                 {
                     Id = movie.Id
                 };
-                _context.Add(movieDao);
+                await _movieRepository.Add(movieDao, token);
             }
+
             movieDao.GenreId = (short)movie.Genre;
             movieDao.RunningTime = movie.RunningTime;
             movieDao.Title = movie.Title;
             movieDao.YearOfRelease = movie.YearOfRelease;
 
-            return await _context.SaveChangesAsync() > 0;
+            return await _unitOfWork.Save(token);
         }
 
-        public async Task<Movie> GetMovieAsync(Guid movieId)
+        private readonly Expression<Func<Repo.Movie, Movie>> _movieProjection = m => new Movie
         {
-            var result = _context.MovieDbSet
-                .Where(m => m.Id == movieId)
-                .Select(m => new Movie
-                {
-                    AverageRating = m.AverageRating,
-                    Genre = (Genres)m.GenreId,
-                    Id = m.Id,
-                    RunningTime = m.RunningTime,
-                    Title = m.Title,
-                    YearOfRelease = m.YearOfRelease
-                });
+            AverageRating = m.AverageRating,
+            Genre = (Genres)m.GenreId,
+            Id = m.Id,
+            RunningTime = m.RunningTime,
+            Title = m.Title,
+            YearOfRelease = m.YearOfRelease
+        };
 
-            return await result.FirstOrDefaultAsync();
-        }
-
-        public async Task<List<Movie>> GetMoviesAsync()
-        {
-            return await _context.MovieDbSet
-                .OrderBy(m => m.Title)
-                .Select(m => new Movie
-                {
-                    AverageRating = m.AverageRating,
-                    Genre = (Genres)m.GenreId,
-                    Id = m.Id,
-                    RunningTime = m.RunningTime,
-                    Title = m.Title,
-                    YearOfRelease = m.YearOfRelease
-                })
-                .ToListAsync();
-        }
     }
 }

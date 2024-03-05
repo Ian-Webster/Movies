@@ -5,7 +5,7 @@ using Movies.Domain.Enums.Validation;
 
 namespace Movies.Ux.Mvc.Controllers
 {
-    public class MovieRatingController : Controller
+    public class MovieRatingController : BaseController
     {
         private readonly IMovieService _movieService;
         private readonly IRatingService _ratingService;
@@ -22,7 +22,7 @@ namespace Movies.Ux.Mvc.Controllers
         [Route("MovieRating/TopX/{movieCount:int}")]
         public async Task<ActionResult> TopX(byte movieCount)
         {
-            var topMovies = await _movieService.TopMoviesAsync(movieCount);
+            var topMovies = await _movieService.TopMovies(movieCount, GetCancellationToken());
             await SetViewBagData(movieCount);
             return View(topMovies);
         }
@@ -31,11 +31,11 @@ namespace Movies.Ux.Mvc.Controllers
         [Route("MovieRating/TopX/{movieCount:int}/{userId:guid}")]
         public async Task<ActionResult> TopXByUser(byte movieCount, Guid userId)
         {
-            if (! await _userService.UserExistsAsync(userId))
+            if (! await _userService.UserExists(userId, GetCancellationToken()))
             {
                 return NotFound("User not found");
             }
-            var topMovies = await _movieService.TopMoviesByUserAsync(movieCount, userId);
+            var topMovies = await _movieService.TopMoviesByUser(movieCount, userId, GetCancellationToken());
             await SetViewBagData(movieCount, userId);
             return View(topMovies);
         }
@@ -45,12 +45,12 @@ namespace Movies.Ux.Mvc.Controllers
         /*[ValidateAntiForgeryToken]*/
         public async Task<ActionResult> Rate(MovieRating movieRating)
         {
-            var validationResult = await _ratingService.ValidateMovieRatingAsync(movieRating);
+            var validationResult = await _ratingService.ValidateMovieRating(movieRating, GetCancellationToken());
 
             switch (validationResult)
             {
                 case MovieRatingSaveValidationResults.OK:
-                    if (await _ratingService.SaveRatingAsync(movieRating))
+                    if (await _ratingService.SaveRating(movieRating, GetCancellationToken()))
                     {
                         return Ok();
                     }
@@ -74,7 +74,7 @@ namespace Movies.Ux.Mvc.Controllers
             ViewBag.MovieCount = movieCount;
             if (userId.HasValue)
             {
-                var user = await _userService.GetUserAsync(userId.Value);
+                var user = await _userService.GetUser(userId.Value, GetCancellationToken());
                 if (user != null)
                 {
                     ViewBag.UserName = user.UserName;

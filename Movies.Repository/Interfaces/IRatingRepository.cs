@@ -1,4 +1,5 @@
-﻿using Movies.Domain.DTO;
+﻿using System.Threading;
+using Movies.Domain.DTO;
 using System.Threading.Tasks;
 
 namespace Movies.Repository.Interfaces
@@ -11,7 +12,7 @@ namespace Movies.Repository.Interfaces
         /// </summary>
         /// <param name="movieRating"></param>
         /// <returns>true if save successful, false if not</returns>
-        Task<bool> SaveRatingAsync(MovieRating movieRating);
+        Task<bool> SaveRating(MovieRating movieRating, CancellationToken token);
 
     }
 }

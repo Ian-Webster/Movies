@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Movies.Business.Interfaces;
-using Movies.Domain.Enums;
 
 namespace Movies.Ux.Mvc.Controllers
 {
 
-    public class MovieController : Controller
+    public class MovieController : BaseController
     {
         private readonly IMovieService _movieService;
 
@@ -18,7 +16,7 @@ namespace Movies.Ux.Mvc.Controllers
         // GET: MovieController
         public async Task<ActionResult> Index()
         {
-            var movies = await _movieService.GetMoviesAsync();
+            var movies = await _movieService.GetMovies(GetCancellationToken());
             return View(movies);
         }
 
@@ -27,7 +25,7 @@ namespace Movies.Ux.Mvc.Controllers
         {
             try
             {
-                var movie = await _movieService.GetMovieAsync(id);
+                var movie = await _movieService.GetMovie(id, GetCancellationToken());
                 return View(movie);
             }
             catch (Exception ex)

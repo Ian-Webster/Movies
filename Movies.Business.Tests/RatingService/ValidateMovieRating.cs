@@ -17,7 +17,7 @@ namespace Movies.Business.Tests.RatingService
             var expectedResult = MovieRatingSaveValidationResults.NullRating;
 
             // Act 
-            var result = GetService().ValidateMovieRatingAsync(null);
+            var result = GetService().ValidateMovieRating(null, GetCancellationToken());
 
             // Assert
             Assert.That(expectedResult, Is.EqualTo(result.Result));
@@ -41,11 +41,11 @@ namespace Movies.Business.Tests.RatingService
                 Rating = 1
             };
 
-            MockUserService.Setup(s => s.UserExistsAsync(userId)).Returns(Task.FromResult(userExists));
-            MockMovieService.Setup(s => s.MovieExistsAsync(movieId)).Returns(Task.FromResult(movieExists));
+            MockUserService.Setup(s => s.UserExists(userId, GetCancellationToken())).Returns(Task.FromResult(userExists));
+            MockMovieService.Setup(s => s.MovieExists(movieId, GetCancellationToken())).Returns(Task.FromResult(movieExists));
 
             // Act 
-            var result = GetService().ValidateMovieRatingAsync(movieRating);
+            var result = GetService().ValidateMovieRating(movieRating, GetCancellationToken());
 
             // Assert
             Assert.That(expectedResult, Is.EqualTo(result.Result));

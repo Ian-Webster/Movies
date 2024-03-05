@@ -4,6 +4,8 @@ using Movies.Domain.DTO;
 using Movies.Domain.Enums.Validation;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using dto = Movies.Domain.DTO;
 
@@ -15,16 +17,15 @@ namespace Movies.API.Tests.SearchMovies
 
         [TestCase(MovieSearchValidationResults.InvalidCriteria)]
         [TestCase(MovieSearchValidationResults.NoCriteria)]
-        public void Should_ReturnExpectedResponseWhen_Invalid(MovieSearchValidationResults validationResult)
+        public async Task Should_ReturnExpectedResponseWhen_Invalid(MovieSearchValidationResults validationResult)
         {
-            //arrange
+            // Arrange
             MockMovieService.Setup(s => s.ValidateSearchCriteria(It.IsAny<MovieSearchCriteria>())).Returns(validationResult);
 
-            //act
-            var asycResult = GetController().Get(new MovieSearchCriteria());
+            // Act
+            var result = await GetController().Get(new MovieSearchCriteria());
 
-            //assert
-            var result = asycResult.Result;
+            // Assert
             switch (validationResult)
             {
                 case MovieSearchValidationResults.InvalidCriteria:
@@ -38,40 +39,44 @@ namespace Movies.API.Tests.SearchMovies
 
         [TestCase(true)]
         [TestCase(false)]
-        public void Should_ReturnNotFoundWhen_ResultIsNullOrEmpty(bool isNull)
+        public async Task Should_ReturnNotFoundWhen_ResultIsNullOrEmpty(bool isNull)
         {
-            //arrange
+            // Arrange
             MockMovieService.Setup(s => s.ValidateSearchCriteria(It.IsAny<MovieSearchCriteria>())).Returns(MovieSearchValidationResults.OK);
             if (isNull)
             {
-                MockMovieService.Setup(s => s.SearchMoviesAsync(It.IsAny<MovieSearchCriteria>())).Returns(Task.FromResult(null as List<dto.Movie>));
+                MockMovieService
+                    .Setup(s => s.SearchMovies(It.IsAny<MovieSearchCriteria>(), It.IsAny<CancellationToken>()))
+                    .Returns(Task.FromResult(null as IEnumerable<dto.Movie>));
             }
             else
             {
-                MockMovieService.Setup(s => s.SearchMoviesAsync(It.IsAny<MovieSearchCriteria>())).Returns(Task.FromResult(new List<dto.Movie>()));
+                MockMovieService
+                    .Setup(s => s.SearchMovies(It.IsAny<MovieSearchCriteria>(), It.IsAny<CancellationToken>()))
+                    .Returns(Task.FromResult(Enumerable.Empty<dto.Movie>()));
             }
 
-            //act
+            // Act
             var asyncResult = GetController().Get(new MovieSearchCriteria());
 
-            //assert
+            // Assert
             var result = asyncResult.Result;
             Assert.That(result, Is.InstanceOf<NotFoundResult>());
 
         }
 
         [Test]
-        public void Should_ReturnJson()
+        public async Task Should_ReturnJson()
         {
-            //arrange
+            // Arrange
             MockMovieService.Setup(s => s.ValidateSearchCriteria(It.IsAny<MovieSearchCriteria>())).Returns(MovieSearchValidationResults.OK);
-            MockMovieService.Setup(s => s.SearchMoviesAsync(It.IsAny<MovieSearchCriteria>())).Returns(Task.FromResult(new List<dto.Movie> { new dto.Movie()}));
+            MockMovieService.Setup(s => s.SearchMovies(It.IsAny<MovieSearchCriteria>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult((IEnumerable<dto.Movie>)new List<dto.Movie>() { new dto.Movie() }));
 
-            //act
-            var jsonAsyncResult = GetController().Get(new MovieSearchCriteria());
+            // Act
+            var jsonResult = await GetController().Get(new MovieSearchCriteria());
 
-            //assert
-            var jsonResult = jsonAsyncResult.Result;
+            // Assert
             Assert.That(jsonResult, Is.InstanceOf<JsonResult>());
         }
     }

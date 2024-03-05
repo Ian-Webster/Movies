@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Movies.Repository.Entities;
-using Movies.Repository.EntityTypeConfigurations;
+using System.Reflection;
+using System;
 
 namespace Movies.Repository
 {
@@ -16,9 +17,15 @@ namespace Movies.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new MovieConfiguration());
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new MovieRatingConfiguration());
+            base.OnModelCreating(modelBuilder);
+            // get the the assembly your EntityTypeConfigurations are in
+            // in this case they are in the same assembly as this context class
+            var assembly = Assembly.GetAssembly(typeof(Context));
+            if (assembly == null)
+            {
+                throw new Exception($"Failed to get assembly for {nameof(Context)}");
+            }
+            modelBuilder.ApplyConfigurationsFromAssembly(assembly);
         }
     }
 }

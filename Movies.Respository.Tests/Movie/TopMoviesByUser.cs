@@ -28,7 +28,7 @@ namespace Movies.Repository.Tests.Movie
             }
 
             //act
-            var asyncResult = GetRepository().TopMoviesByUserAsync(count, userId);
+            var asyncResult = GetRepository().TopMoviesByUser(count, userId);
 
             //assert
             var result = asyncResult.Result;

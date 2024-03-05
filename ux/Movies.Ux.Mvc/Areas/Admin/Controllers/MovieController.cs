@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Movies.Business.Interfaces;
 using Movies.Domain.DTO;
 using Movies.Domain.Enums;
+using Movies.Ux.Mvc.Controllers;
 
 namespace Movies.Ux.Mvc.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class MovieController : Controller
+    public class MovieController : BaseController
     {
         private readonly IMovieService _movieService;
 
@@ -19,7 +20,7 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
         // GET: MovieController
         public async Task<ActionResult> Index()
         {
-            var movies = await _movieService.GetMoviesAsync();
+            var movies = await _movieService.GetMovies(GetCancellationToken());
             return View(movies);
         }
 
@@ -28,7 +29,7 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
         {
             try
             {
-                var movie = await _movieService.GetMovieAsync(id);
+                var movie = await _movieService.GetMovie(id, GetCancellationToken());
                 return View(movie);
             }
             catch (Exception ex)
@@ -51,7 +52,7 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Movie movie)
         {
-            var movieAdded = await _movieService.SaveMovieAsync(movie);
+            var movieAdded = await _movieService.SaveMovie(movie, GetCancellationToken());
             if (movieAdded)
             {
                 return RedirectToAction(nameof(Details), new { id = movie.Id });
@@ -65,7 +66,7 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
         // GET: MovieController/Edit/5
         public async Task<ActionResult> Edit(Guid id)
         {
-            var movie = await _movieService.GetMovieAsync(id);
+            var movie = await _movieService.GetMovie(id, GetCancellationToken());
             SetGenreSelectList();
             return movie != null ? View(movie) : NotFound();
         }
@@ -75,7 +76,7 @@ namespace Movies.Ux.Mvc.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Movie movie)
         {
-            var movieUpdated = await _movieService.SaveMovieAsync(movie);
+            var movieUpdated = await _movieService.SaveMovie(movie, GetCancellationToken());
 
             return movieUpdated ? RedirectToAction(nameof(Details), new { id = movie.Id }) : BadRequest("unable to save movie");
         }

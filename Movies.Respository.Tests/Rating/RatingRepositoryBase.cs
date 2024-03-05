@@ -1,4 +1,5 @@
 ﻿using Movies.Repository.Entities;
+using Movies.Repository.Repositories;
 using NUnit.Framework;
 
 namespace Movies.Repository.Tests.Rating
@@ -13,7 +14,7 @@ namespace Movies.Repository.Tests.Rating
 
         protected RatingRepository GetRepository()
         {
-            return new RatingRepository(new Context(options.Options));
+            return new RatingRepository(GetUnitOfWork());
         }
 
         protected void InsertRating(MovieRating rating)

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Movies.Repository.Repositories;
+using NUnit.Framework;
 using repo = Movies.Repository.Entities;
 
 namespace Movies.Repository.Tests.User
@@ -8,7 +9,7 @@ namespace Movies.Repository.Tests.User
 
         protected UserRepository GetRepository()
         {
-            return new UserRepository(GetContext());
+            return new UserRepository(GetUnitOfWork());
         }
 
         [SetUp]

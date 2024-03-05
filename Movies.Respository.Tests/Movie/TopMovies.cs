@@ -24,12 +24,12 @@ namespace Movies.Repository.Tests.Movie
             }
 
             //act
-            var asyncResult = GetRepository().TopMoviesAsync(count);
+            var asyncResult = GetRepository().TopMovies(count, GetCancellationToken());
 
             //assert
             var result = asyncResult.Result;
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Count, Is.EqualTo(result.Count));
+            Assert.That(result.Count, Is.EqualTo(result.Count()));
 
             var minExpectedRating = movies.Min(m => m.AverageRating);
             var maxExpectedRating = movies.Max(m => m.AverageRating);
